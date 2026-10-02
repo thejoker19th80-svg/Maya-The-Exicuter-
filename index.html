@@ -14,8 +14,8 @@
             background: rgba(10, 2, 4, 0.95); backdrop-filter: blur(8px);
         }
         .hidden { display: none !important; }
-        h1.title { font-size: 2.5rem; color: #ff0033; text-shadow: 0 0 15px #ff0033; letter-spacing: 2px; text-align: center; }
-        h2.subtitle { font-size: 1rem; color: #ccaa77; margin-bottom: 20px; text-transform: uppercase; }
+        h1.title { font-size: 2.2rem; color: #ff0033; text-shadow: 0 0 15px #ff0033; letter-spacing: 2px; text-align: center; }
+        h2.subtitle { font-size: 0.9rem; color: #ccaa77; margin-bottom: 20px; text-transform: uppercase; text-align: center; }
         .btn {
             background: linear-gradient(135deg, #880011, #ff0033); color: #fff; border: 1px solid #ff4466;
             padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer;
@@ -41,6 +41,13 @@
         .action-btn { width: 60px; height: 60px; border-radius: 50%; color: white; font-weight: bold; border: 1px solid #ff4466; box-shadow: 0 0 12px rgba(255, 0, 51, 0.6); touch-action: manipulation; }
         .episodes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 90%; max-height: 50vh; overflow-y: auto; }
         .ep-card { background: rgba(30, 5, 10, 0.8); border: 1px solid #ff0033; padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; }
+        
+        /* Video Overlay Overlay Styles */
+        #video-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #cutscene-video { width: 100%; height: 100%; object-fit: cover; }
+        .video-controls { position: absolute; bottom: 20px; right: 20px; z-index: 51; display: flex; gap: 10px; align-items: center; }
+        .skip-btn { background: rgba(255, 0, 51, 0.8); border: 1px solid #fff; color: white; padding: 10px 20px; font-weight: bold; border-radius: 20px; cursor: pointer; }
+        .ep-title-overlay { position: absolute; top: 20px; left: 20px; z-index: 51; background: rgba(0,0,0,0.6); padding: 10px 15px; border-left: 4px solid #ff0033; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -53,6 +60,7 @@
 
         <div id="canvas-container"></div>
 
+        <!-- Main Menu -->
         <div id="main-menu" class="ui-screen">
             <h1 class="title">MAYA THE EXECUTOR</h1>
             <h2 class="subtitle">Chapter 1: Origin of the Red Angel</h2>
@@ -61,12 +69,14 @@
             <button class="btn" onclick="openArmory()">Armory & Upgrades</button>
         </div>
 
+        <!-- Episodes Selection -->
         <div id="episodes-menu" class="ui-screen hidden">
             <h1 class="title">EPISODES</h1>
             <div class="episodes-grid" id="episodes-container"></div>
             <button class="btn" style="margin-top:15px;" onclick="showScreen('main-menu')">Back</button>
         </div>
 
+        <!-- Armory -->
         <div id="armory-menu" class="ui-screen hidden">
             <h1 class="title">ARMORY</h1>
             <div style="background:rgba(20,5,10,0.8); padding:15px; border-radius:8px; border:1px solid #ff0033; text-align:center;">
@@ -81,6 +91,7 @@
             <button class="btn" style="margin-top:15px;" onclick="showScreen('main-menu')">Back</button>
         </div>
 
+        <!-- Combat Puzzle Mini-game -->
         <div id="minigame-menu" class="ui-screen hidden">
             <h1 class="title">COMBAT PUZZLE</h1>
             <h2 class="subtitle">Match Icons To Gain Rewards</h2>
@@ -88,6 +99,19 @@
             <button class="btn" onclick="showScreen('main-menu')">Collect & Exit</button>
         </div>
 
+        <!-- Video Cutscene Screen -->
+        <div id="video-screen" class="hidden">
+            <div class="ep-title-overlay">
+                <h3 id="cutscene-title" style="color:#ff0033; font-size:1.1rem;">EPISODE</h3>
+                <p id="cutscene-desc" style="color:#aaa; font-size:0.8rem;">Story Briefing</p>
+            </div>
+            <video id="cutscene-video" playsinline webkit-playsinline muted autocomplete="off"></video>
+            <div class="video-controls">
+                <button class="skip-btn" onclick="endCutsceneAndStartMission()">START MISSION ➔</button>
+            </div>
+        </div>
+
+        <!-- HUD Screen -->
         <div id="hud" class="hidden">
             <div class="hud-element" style="position:absolute; top:20px; left:20px; color:#ff0033; font-weight:bold; font-size:1.2rem;">KILLS: <span id="score">0</span></div>
             <div id="joystick-zone" class="hud-element"><div id="joystick-stick"></div></div>
@@ -102,24 +126,29 @@
 
     <script>
         let playerData = { cash: 500, parts: 10, gunLevel: 1, armorLevel: 1 };
+        
+        // High quality cinematic trailer MP4 links matching the story theme
         const episodes = [
-            { id: 1, name: "Ep 1: Life in Ashes", desc: "Rescue & Memories" },
-            { id: 2, name: "Ep 2: Phantom Ninja", desc: "Martial Arts Training" },
-            { id: 3, name: "Ep 3: First Vendetta", desc: "Rival Gang Massacre" },
-            { id: 4, name: "Ep 4: Docks Intercept", desc: "Arms Convoy Raid" },
-            { id: 5, name: "Ep 5: Neon Chamber", desc: "Cyberpunk Assassination" },
-            { id: 6, name: "Ep 6: Phantom Vengeance", desc: "Rage Vision Mission" },
-            { id: 7, name: "Ep 7: Iron Fortress", desc: "Heavy Siege" },
-            { id: 8, name: "Ep 8: Darkside Betrayal", desc: "Rogue Strike" },
-            { id: 9, name: "Ep 9: Extraction", desc: "City Warfare" },
-            { id: 10, name: "Ep 10: Path of Ruin", desc: "Citadel Siege" },
-            { id: 11, name: "Ep 11: Blood Guards", desc: "Semifinal Boss" },
-            { id: 12, name: "Ep 12: Territory Head", desc: "Final Execution" }
+            { id: 1, name: "Ep 1: Life in Ashes", desc: "Rescue & Memories", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+            { id: 2, name: "Ep 2: Phantom Ninja", desc: "Martial Arts Training", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
+            { id: 3, name: "Ep 3: First Vendetta", desc: "Rival Gang Massacre", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" },
+            { id: 4, name: "Ep 4: Docks Intercept", desc: "Arms Convoy Raid", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyflights.mp4" },
+            { id: 5, name: "Ep 5: Neon Chamber", desc: "Cyberpunk Assassination", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" },
+            { id: 6, name: "Ep 6: Phantom Vengeance", desc: "Rage Vision Mission", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" },
+            { id: 7, name: "Ep 7: Iron Fortress", desc: "Heavy Siege", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackTakeTheCity.mp4" },
+            { id: 8, name: "Ep 8: Darkside Betrayal", desc: "Rogue Strike", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
+            { id: 9, name: "Ep 9: Extraction", desc: "City Warfare", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4" },
+            { id: 10, name: "Ep 10: Path of Ruin", desc: "Citadel Siege", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4" },
+            { id: 11, name: "Ep 11: Blood Guards", desc: "Semifinal Boss", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+            { id: 12, name: "Ep 12: Territory Head", desc: "Final Execution", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" }
         ];
+
+        let selectedEpisode = null;
 
         function showScreen(screenId) {
             document.querySelectorAll('.ui-screen').forEach(s => s.classList.add('hidden'));
             document.getElementById('hud').classList.add('hidden');
+            document.getElementById('video-screen').classList.add('hidden');
             if (screenId) document.getElementById(screenId).classList.remove('hidden');
             updateCurrencyUI();
         }
@@ -138,15 +167,37 @@
                 const card = document.createElement('div');
                 card.className = 'ep-card';
                 card.innerHTML = `<h3>${ep.name}</h3><p>${ep.desc}</p>`;
-                card.onclick = () => startMission(ep);
+                card.onclick = () => playCutscene(ep);
                 container.appendChild(card);
             });
             showScreen('episodes-menu');
         }
 
+        function playCutscene(ep) {
+            selectedEpisode = ep;
+            showScreen(null);
+            const videoScreen = document.getElementById('video-screen');
+            const videoEl = document.getElementById('cutscene-video');
+            document.getElementById('cutscene-title').innerText = ep.name;
+            document.getElementById('cutscene-desc').innerText = ep.desc;
+            
+            videoEl.src = ep.video;
+            videoScreen.classList.remove('hidden');
+            
+            videoEl.play().catch(e => console.log("Autoplay handled:", e));
+            videoEl.onended = () => { endCutsceneAndStartMission(); };
+        }
+
+        function endCutsceneAndStartMission() {
+            const videoEl = document.getElementById('cutscene-video');
+            videoEl.pause();
+            document.getElementById('video-screen').classList.add('hidden');
+            startMission();
+        }
+
         function openArmory() { showScreen('armory-menu'); }
-        function upgradeGun() { if(playerData.cash>=200){ playerData.cash-=200; playerData.gunLevel++; updateCurrencyUI(); alert("Upgraded!"); } }
-        function upgradeArmor() { if(playerData.parts>=15){ playerData.parts-=15; playerData.armorLevel++; updateCurrencyUI(); alert("Upgraded!"); } }
+        function upgradeGun() { if(playerData.cash>=200){ playerData.cash-=200; playerData.gunLevel++; updateCurrencyUI(); alert("Gun Upgraded!"); } }
+        function upgradeArmor() { if(playerData.parts>=15){ playerData.parts-=15; playerData.armorLevel++; updateCurrencyUI(); alert("Armor Upgraded!"); } }
 
         const tileTypes = ['🔴', '⚔️', '💣', '⚙️', '💎'];
         function openMiniGame() { showScreen('minigame-menu'); initMatch3Grid(); }
@@ -255,5 +306,5 @@
         window.onload = () => { init3DEngine(); updateCurrencyUI(); };
     </script>
 </body>
-  </html>
-  
+    </html>
+    

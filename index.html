@@ -17,17 +17,17 @@
         }
         .hidden { display: none !important; }
 
-        .title-container { text-align: center; margin-bottom: 20px; }
+        .title-container { text-align: center; margin-bottom: 15px; }
         h1.title {
             font-size: 2.2rem; color: #ff0033; text-transform: uppercase; letter-spacing: 3px;
             text-shadow: 0 0 20px #ff0033, 0 0 40px #880011; font-weight: 900;
         }
         h2.subtitle { font-size: 0.8rem; color: #ffaa00; letter-spacing: 2px; text-transform: uppercase; margin-top: -5px; }
 
-        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 80%; max-width: 300px; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; width: 85%; max-width: 320px; }
         .cyber-btn {
             background: linear-gradient(135deg, rgba(255, 0, 51, 0.25), rgba(136, 0, 17, 0.85));
-            color: #fff; border: 1px solid #ff0033; padding: 14px 20px; font-size: 0.9rem;
+            color: #fff; border: 1px solid #ff0033; padding: 12px 18px; font-size: 0.85rem;
             font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase;
             letter-spacing: 1.5px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.3); text-align: center;
         }
@@ -39,19 +39,32 @@
             border: 1px solid #ff0033; box-shadow: 0 0 10px rgba(255, 0, 51, 0.4); font-size: 0.85rem;
         }
 
-        /* Campaign Mode Direct 3D Action Controls */
+        .armory-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 95%; max-width: 400px;
+            background: rgba(15, 3, 8, 0.9); padding: 12px; border: 1px solid #ff0033; border-radius: 6px;
+        }
+        .armory-card {
+            background: rgba(30, 5, 12, 0.8); border: 1px solid rgba(255, 0, 51, 0.4);
+            padding: 8px; border-radius: 4px; text-align: center;
+        }
+        .armory-card h4 { color: #ff0033; font-size: 0.85rem; margin-bottom: 4px; }
+        .armory-card p { font-size: 0.75rem; color: #ffaa00; margin-bottom: 6px; }
+
         #campaign-controls-overlay {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 12;
-            pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 20px;
+            pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
         }
-        .action-btns { pointer-events: auto; display: flex; gap: 10px; align-self: flex-end; }
+        .mission-info-badge {
+            background: rgba(10, 0, 5, 0.85); border: 1px solid #ff0033; padding: 6px 12px;
+            border-radius: 4px; color: #ffaa00; font-weight: bold; font-size: 0.8rem; pointer-events: auto; align-self: flex-start;
+        }
+        .action-btns { pointer-events: auto; display: flex; gap: 8px; align-self: flex-end; }
         .ctrl-btn {
-            width: 55px; height: 55px; border-radius: 50%; background: rgba(255, 0, 51, 0.6);
-            border: 2px solid #ff0033; color: white; font-weight: bold; font-size: 0.75rem;
+            width: 52px; height: 52px; border-radius: 50%; background: rgba(255, 0, 51, 0.65);
+            border: 2px solid #ff0033; color: white; font-weight: bold; font-size: 0.7rem;
             display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px #ff0033;
         }
 
-        /* Vertical Combat Mode UI (7x7 Board) */
         #combat-vertical-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 15;
             display: flex; flex-direction: column; background: #050205;
@@ -68,7 +81,6 @@
         }
         .health-fill { height: 100%; width: 100%; transition: width 0.3s ease; }
 
-        /* 7x7 Grid Styling */
         #match3-grid-7x7 {
             display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(7, 1fr);
             gap: 4px; width: 95vw; height: 95vw; max-width: 380px; max-height: 380px;
@@ -82,7 +94,6 @@
         }
         .gem:active { transform: scale(1.15); }
 
-        /* Neon Gem Colors */
         .gem-red { background: rgba(255, 0, 51, 0.35); border-color: #ff0033; box-shadow: 0 0 6px #ff0033; }
         .gem-blue { background: rgba(0, 153, 255, 0.35); border-color: #0099ff; box-shadow: 0 0 6px #0099ff; }
         .gem-green { background: rgba(0, 255, 102, 0.35); border-color: #00ff66; box-shadow: 0 0 6px #00ff66; }
@@ -90,11 +101,8 @@
         .gem-purple { background: rgba(170, 0, 255, 0.35); border-color: #aa00ff; box-shadow: 0 0 6px #aa00ff; }
         .gem-black { background: rgba(40, 40, 40, 0.8); border-color: #ff0088; box-shadow: 0 0 8px #ff0088; }
 
-        .gem-special { border: 2px solid #fff; animation: pulseGlow 0.8s infinite alternate; }
-        @keyframes pulseGlow { from { transform: scale(0.95); } to { transform: scale(1.05); } }
-
         .episodes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 95%; max-height: 55vh; overflow-y: auto; }
-        .ep-card { background: rgba(30, 5, 10, 0.85); border: 1px solid #ff0033; padding: 10px; border-radius: 4px; text-align: center; cursor: pointer; }
+        .ep-card { background: rgba(30, 5, 10, 0.85); border: 1px solid #ff0033; padding: 8px; border-radius: 4px; text-align: center; cursor: pointer; }
 
         #reaction-overlay {
             position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
@@ -127,7 +135,7 @@
             </div>
         </div>
 
-        <!-- Episodes Campaign Menu -->
+        <!-- Campaign Menu -->
         <div id="episodes-menu" class="ui-screen hidden">
             <h1 class="title" style="font-size:1.6rem;">CAMPAIGN EPISODES</h1>
             <div class="episodes-grid" id="episodes-container"></div>
@@ -137,16 +145,26 @@
         <!-- Armory Screen -->
         <div id="armory-menu" class="ui-screen hidden">
             <h1 class="title" style="font-size:1.6rem;">ARMORY HUB</h1>
-            <div style="background:rgba(20,5,10,0.9); padding:15px; border:1px solid #ff0033; display:flex; flex-direction:column; gap:15px; text-align:center;">
-                <div>
-                    <h3 style="color:#ff0033;">Dual Tactical Pistols</h3>
-                    <p>Lvl: <span id="gun-lvl">1</span></p>
-                    <button class="cyber-btn" style="margin-top:6px;" onclick="upgradeGun()">Upgrade (200 Cash)</button>
+            <div class="armory-grid">
+                <div class="armory-card">
+                    <h4>Dual Katanas</h4>
+                    <p>Lvl: <span id="katana-lvl">1</span></p>
+                    <button class="cyber-btn" style="padding:6px 10px;" onclick="upgradeWeapon('katana')">Up (150💰)</button>
                 </div>
-                <div style="border-top:1px solid #ff0033; padding-top:10px;">
-                    <h3 style="color:#ffaa00;">Dark Phantom Suit</h3>
-                    <p>Lvl: <span id="armor-lvl">1</span></p>
-                    <button class="cyber-btn" style="margin-top:6px;" onclick="upgradeArmor()">Upgrade (15 Parts)</button>
+                <div class="armory-card">
+                    <h4>Pistols</h4>
+                    <p>Lvl: <span id="pistol-lvl">1</span></p>
+                    <button class="cyber-btn" style="padding:6px 10px;" onclick="upgradeWeapon('pistol')">Up (200💰)</button>
+                </div>
+                <div class="armory-card">
+                    <h4>Assault Rifle</h4>
+                    <p>Lvl: <span id="ar-lvl">1</span></p>
+                    <button class="cyber-btn" style="padding:6px 10px;" onclick="upgradeWeapon('ar')">Up (350💰)</button>
+                </div>
+                <div class="armory-card">
+                    <h4>Sniper Rifle</h4>
+                    <p>Lvl: <span id="sniper-lvl">1</span></p>
+                    <button class="cyber-btn" style="padding:6px 10px;" onclick="upgradeWeapon('sniper')">Up (10⚙️)</button>
                 </div>
             </div>
             <button class="cyber-btn" style="margin-top:12px;" onclick="showScreen('main-menu')">Back</button>
@@ -154,12 +172,11 @@
 
         <!-- Campaign Action Controls Overlay -->
         <div id="campaign-controls-overlay" class="hidden">
-            <button class="cyber-btn" style="pointer-events:auto;" onclick="exitCampaignMode()">Exit Episode</button>
-            <div class="action-btns">
-                <div class="ctrl-btn" onclick="trigger3DAction('fire')">FIRE</div>
-                <div class="ctrl-btn" onclick="trigger3DAction('slash')">SLASH</div>
-                <div class="ctrl-btn" onclick="trigger3DAction('dodge')">DODGE</div>
+            <div style="display:flex; justify-content:space-between; width:100%;">
+                <div class="mission-info-badge" id="mission-type-label">MISSION: ASSAULT</div>
+                <button class="cyber-btn" style="pointer-events:auto; padding:6px 12px;" onclick="exitCampaignMode()">Exit</button>
             </div>
+            <div class="action-btns" id="campaign-btns-container"></div>
         </div>
 
         <!-- Vertical Combat Screen (7x7 Board) -->
@@ -182,14 +199,30 @@
     </div>
 
     <script>
-        let playerData = { cash: 500, parts: 10, gunLevel: 1, armorLevel: 1 };
+        let playerData = { cash: 500, parts: 10, katanaLvl: 1, pistolLvl: 1, arLvl: 1, sniperLvl: 1, viktorShieldBroken: false };
         let mayaHP = 100, enemyHP = 100;
         let extraTurn = false;
+        let activeMission = null;
+
+        const campaignMissions = [
+            { ep: 1, type: "STEALTH", name: "Infiltration", desc: "Dagger & Katana" },
+            { ep: 2, type: "STEALTH", name: "Guard Outpost", desc: "Pistol & Katana" },
+            { ep: 3, type: "ASSAULT", name: "Docks Rampage", desc: "Assault Rifle" },
+            { ep: 4, type: "STEALTH", name: "Cyber Lab", desc: "Ninja Stars & Katana" },
+            { ep: 5, type: "ASSAULT", name: "Warehouse Rush", desc: "Assault Rifle" },
+            { ep: 6, type: "SNIPER", name: "Tower Vantage", desc: "Sniper Scope Shot" },
+            { ep: 7, type: "ASSAULT", name: "Convoy Ambush", desc: "Assault Rifle" },
+            { ep: 8, type: "SNIPER", name: "Rooftop Assassination", desc: "Precision Sniper" },
+            { ep: 9, type: "STEALTH", name: "Inner Sanctum", desc: "Katana Silent Slash" },
+            { ep: 10, type: "SNIPER", name: "Helipad Guard", desc: "Sniper Long Range" },
+            { ep: 11, type: "RAID", name: "Citadel Raid: Lord Vane", desc: "Raid Citadel (+500💰, +20⚙️, Shield Break Keycard)", perkReward: { cash: 500, parts: 20 } },
+            { ep: 12, type: "BOSS", name: "Commander Viktor", desc: "Final Boss Fight" }
+        ];
 
         const gemTypes = [
             { symbol: '🗡️', class: 'gem-red', type: 'katana' },
             { symbol: '🎯', class: 'gem-blue', type: 'shuriken' },
-            { symbol: '🛡️️', class: 'gem-green', type: 'armor' },
+            { symbol: '🛡', class: 'gem-green', type: 'armor' },
             { symbol: '⚡', class: 'gem-yellow', type: 'lightning' },
             { symbol: '🔪', class: 'gem-purple', type: 'dagger' },
             { symbol: '❤️', class: 'gem-black', type: 'heart' }
@@ -206,49 +239,85 @@
         function updateCurrencyUI() {
             document.getElementById('cash-val').innerText = playerData.cash;
             document.getElementById('parts-val').innerText = playerData.parts;
-            document.getElementById('gun-lvl').innerText = playerData.gunLevel;
-            document.getElementById('armor-lvl').innerText = playerData.armorLevel;
+            document.getElementById('katana-lvl').innerText = playerData.katanaLvl;
+            document.getElementById('pistol-lvl').innerText = playerData.pistolLvl;
+            document.getElementById('ar-lvl').innerText = playerData.arLvl;
+            document.getElementById('sniper-lvl').innerText = playerData.sniperLvl;
         }
 
-        /* Campaign Mode (Free Action Controls) */
         function openEpisodes() {
             const container = document.getElementById('episodes-container');
             container.innerHTML = '';
-            for(let i=1; i<=12; i++) {
+            campaignMissions.forEach(m => {
                 const card = document.createElement('div');
                 card.className = 'ep-card';
-                card.innerHTML = `<h4>Ep ${i}</h4><p style="font-size:0.7rem;">Action Mission</p>`;
-                card.onclick = () => startCampaignEpisode(i);
+                card.innerHTML = `<h4>Ep ${m.ep}: ${m.type}</h4><p style="font-size:0.6rem;">${m.desc}</p>`;
+                card.onclick = () => startCampaignEpisode(m);
                 container.appendChild(card);
-            }
+            });
             showScreen('episodes-menu');
         }
 
-        function startCampaignEpisode(epNum) {
+        function startCampaignEpisode(mission) {
+            activeMission = mission;
             showScreen(null);
             document.getElementById('campaign-controls-overlay').classList.remove('hidden');
-            setupCombat3DArena();
+            document.getElementById('mission-type-label').innerText = `EP ${mission.ep}: ${mission.type} - ${mission.name}`;
+            
+            const btnBox = document.getElementById('campaign-btns-container');
+            btnBox.innerHTML = '';
+
+            if (mission.type === 'SNIPER') {
+                btnBox.innerHTML = `<div class="ctrl-btn" onclick="trigger3DAction('ZOOM SCOPE')">SCOPE</div>
+                                    <div class="ctrl-btn" onclick="trigger3DAction('HEADSHOT')">SNIPE</div>`;
+            } else if (mission.type === 'ASSAULT') {
+                btnBox.innerHTML = `<div class="ctrl-btn" onclick="trigger3DAction('AR SPRAY')">SPRAY</div>
+                                    <div class="ctrl-btn" onclick="trigger3DAction('GRENADE')">BOMB</div>`;
+            } else if (mission.type === 'RAID') {
+                btnBox.innerHTML = `<div class="ctrl-btn" onclick="completeRaidMission()">RAID</div>
+                                    <div class="ctrl-btn" onclick="trigger3DAction('BREACH')">BREACH</div>`;
+            } else {
+                btnBox.innerHTML = `<div class="ctrl-btn" onclick="trigger3DAction('KATANA SLASH')">SLASH</div>
+                                    <div class="ctrl-btn" onclick="trigger3DAction('STEALTH STAB')">STAB</div>`;
+            }
+
+            setup3DCharacterModels(mission.type);
+        }
+
+        function completeRaidMission() {
+            if (activeMission && activeMission.perkReward) {
+                playerData.cash += activeMission.perkReward.cash;
+                playerData.parts += activeMission.perkReward.parts;
+                playerData.viktorShieldBroken = true;
+                updateCurrencyUI();
+                showEvilSmileReaction("RAID COMPLETED! LORD VANE DEFEATED!");
+                alert("🎉 CITADEL RAID SUCCESSFUL!\n\nLoot Earned:\n- 💰 +500 Cash\n- ⚙️ +20 Gear Parts\n- 🛡️ Commander Viktor's Shield Keycard Acquired! (Shield Disabled in Ep 12)");
+                exitCampaignMode();
+            }
         }
 
         function trigger3DAction(actionType) {
-            alert("Action Triggered: " + actionType.toUpperCase());
+            alert("MAYA EXECUTED: " + actionType);
         }
 
-        function exitCampaignMode() {
-            showScreen('main-menu');
-        }
-
+        function exitCampaignMode() { showScreen('main-menu'); }
         function openArmory() { showScreen('armory-menu'); }
-        function upgradeGun() { if(playerData.cash>=200){ playerData.cash-=200; playerData.gunLevel++; updateCurrencyUI(); } }
-        function upgradeArmor() { if(playerData.parts>=15){ playerData.parts-=15; playerData.armorLevel++; updateCurrencyUI(); } }
 
-        /* Vertical 7x7 Combat Logic */
+        function upgradeWeapon(type) {
+            if (type === 'katana' && playerData.cash >= 150) { playerData.cash -= 150; playerData.katanaLvl++; }
+            else if (type === 'pistol' && playerData.cash >= 200) { playerData.cash -= 200; playerData.pistolLvl++; }
+            else if (type === 'ar' && playerData.cash >= 350) { playerData.cash -= 350; playerData.arLvl++; }
+            else if (type === 'sniper' && playerData.parts >= 10) { playerData.parts -= 10; playerData.sniperLvl++; }
+            updateCurrencyUI();
+        }
+
+        /* 7x7 Vertical Combat Logic */
         function openCombatPuzzle() {
             showScreen(null);
             document.getElementById('combat-vertical-screen').classList.remove('hidden');
             mayaHP = 100; enemyHP = 100; updateHealthBars();
             init7x7CombatGrid();
-            setupCombat3DArena();
+            setup3DCharacterModels("STEALTH");
         }
 
         function exitCombatPuzzle() {
@@ -259,8 +328,6 @@
         function init7x7CombatGrid() {
             const gridEl = document.getElementById('match3-grid-7x7');
             gridEl.innerHTML = '';
-            
-            // Generate 7x7 (49) Gem Tiles
             for (let r = 0; r < 49; r++) {
                 let g = gemTypes[Math.floor(Math.random() * gemTypes.length)];
                 const tile = document.createElement('div');
@@ -272,126 +339,33 @@
         }
 
         function handleGemClick(gem) {
-            let is5MatchSimulated = Math.random() > 0.78; // 5-Gem Match probability
-            let dmg = 15;
+            let is5MatchSimulated = Math.random() > 0.78;
+            let dmg = 18;
             let actionMsg = "";
 
-            if (gem.type === 'heart') {
-                triggerHeartBlasterMove();
-                return;
-            }
+            if (gem.type === 'heart') { triggerHeartBlasterMove(); return; }
 
             if (is5MatchSimulated) {
                 extraTurn = true;
-                dmg = 32;
+                dmg = 35;
                 actionMsg = `5-MATCH! EXTRA MOVE + SPECIAL ${gem.type.toUpperCase()} GEM!`;
                 showEvilSmileReaction("5-MATCH COMBO! EXTRA TURN!");
             } else {
-                if (gem.type === 'katana') { actionMsg = "RED KATANA: Heavy Slice!"; dmg = 22; }
+                if (gem.type === 'katana') { actionMsg = "RED KATANA: Katana Slice!"; dmg = 22; }
                 else if (gem.type === 'shuriken') { actionMsg = "BLUE SHURIKEN: Multi Star Throw!"; dmg = 16; }
-                else if (gem.type === 'armor') { actionMsg = "GREEN SHIELD: Defense Guard!"; mayaHP = Math.min(100, mayaHP + 15); dmg = 0; }
+                else if (gem.type === 'armor') { actionMsg = "GREEN SHIELD: Defense Shield!"; mayaHP = Math.min(100, mayaHP + 15); dmg = 0; }
                 else if (gem.type === 'lightning') { actionMsg = "YELLOW LIGHTNING: Electro Strike!"; dmg = 25; }
-                else if (gem.type === 'dagger') { actionMsg = "PURPLE DAGGER: Stealth Stab!"; dmg = 20; }
+                else if (gem.type === 'dagger') { actionMsg = "PURPLE DAGGER: Stealth Dagger Stab!"; dmg = 20; }
             }
 
             enemyHP = Math.max(0, enemyHP - dmg);
             document.getElementById('action-text').innerText = actionMsg;
             updateHealthBars();
             
-            if (!extraTurn) {
-                setTimeout(enemyTurnAttack, 800);
-            } else {
-                extraTurn = false;
-            }
+            if (!extraTurn) setTimeout(enemyTurnAttack, 800);
+            else extraTurn = false;
 
             checkVictory();
         }
 
-        function triggerHeartBlasterMove() {
-            showEvilSmileReaction("😏 EVIL SMILE: DRAINING XP & HEART BLASTER!");
-            setTimeout(() => {
-                enemyHP = 0;
-                updateHealthBars();
-                document.getElementById('action-text').innerText = "FATAL 5-PUNCH HEART BLASTER EXECUTION!";
-                setTimeout(() => {
-                    alert("FATAL VICTORY! Enemy Heart Blasted!");
-                    playerData.cash += 250; playerData.parts += 10; updateCurrencyUI();
-                    exitCombatPuzzle();
-                }, 1000);
-            }, 1000);
-        }
-
-        function showEvilSmileReaction(msg) {
-            const overlay = document.getElementById('reaction-overlay');
-            overlay.innerText = msg;
-            overlay.style.opacity = 1;
-            setTimeout(() => { overlay.style.opacity = 0; }, 2200);
-        }
-
-        function enemyTurnAttack() {
-            if (enemyHP <= 0) return;
-            mayaHP = Math.max(0, mayaHP - 10);
-            updateHealthBars();
-            if (mayaHP <= 0) { alert("Mission Failed!"); openCombatPuzzle(); }
-        }
-
-        function checkVictory() {
-            if (enemyHP <= 0) {
-                alert("VICTORY! Rewards Added!");
-                playerData.cash += 100; playerData.parts += 5; updateCurrencyUI();
-                exitCombatPuzzle();
-            }
-        }
-
-        function updateHealthBars() {
-            document.getElementById('maya-health').style.width = mayaHP + '%';
-            document.getElementById('enemy-health').style.width = enemyHP + '%';
-        }
-
-        /* 3D Scene Engine */
-        let scene, camera, renderer, mayaMesh, enemyMesh;
-        function init3DWorld() {
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x050204, 0.03);
-
-            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 3, 7);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
-            scene.add(ambientLight);
-
-            const redLight = new THREE.PointLight(0xff0033, 4, 20);
-            redLight.position.set(0, 5, 2); scene.add(redLight);
-
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshStandardMaterial({ color: 0x11050a }));
-            floor.rotation.x = -Math.PI / 2; scene.add(floor);
-
-            mayaMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.6, 16), new THREE.MeshStandardMaterial({ color: 0xff0033 }));
-            mayaMesh.position.set(-1.2, 0.8, 0); scene.add(mayaMesh);
-
-            enemyMesh = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.6, 0.6), new THREE.MeshStandardMaterial({ color: 0x442222 }));
-            enemyMesh.position.set(1.2, 0.8, 0); scene.add(enemyMesh);
-
-            animate();
-        }
-
-        function setupCombat3DArena() {
-            camera.position.set(0, 2.2, 4.5);
-            camera.lookAt(0, 0.8, 0);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            mayaMesh.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
-
-        window.onload = () => { init3DWorld(); updateCurrencyUI(); };
-    </script>
-</body>
-    </html>
-                        
+        function 

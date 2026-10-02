@@ -13,73 +13,93 @@
         .ui-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(5, 2, 4, 0.85); backdrop-filter: blur(10px); padding: 10px;
+            background: rgba(5, 2, 4, 0.88); backdrop-filter: blur(10px); padding: 10px;
         }
         .hidden { display: none !important; }
 
         .title-container { text-align: center; margin-bottom: 20px; }
         h1.title {
-            font-size: 2.5rem; color: #ff0033; text-transform: uppercase; letter-spacing: 4px;
+            font-size: 2.2rem; color: #ff0033; text-transform: uppercase; letter-spacing: 3px;
             text-shadow: 0 0 20px #ff0033, 0 0 40px #880011; font-weight: 900;
         }
-        h2.subtitle { font-size: 0.85rem; color: #ffaa00; letter-spacing: 2px; text-transform: uppercase; margin-top: -5px; }
+        h2.subtitle { font-size: 0.8rem; color: #ffaa00; letter-spacing: 2px; text-transform: uppercase; margin-top: -5px; }
 
-        .btn-group { display: flex; gap: 12px; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 80%; max-width: 300px; }
         .cyber-btn {
-            background: linear-gradient(135deg, rgba(255, 0, 51, 0.2), rgba(136, 0, 17, 0.8));
-            color: #fff; border: 1px solid #ff0033; padding: 12px 24px; font-size: 0.85rem;
-            font-weight: bold; border-radius: 2px; cursor: pointer; text-transform: uppercase;
-            letter-spacing: 1.5px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
-            transition: all 0.2s ease; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            background: linear-gradient(135deg, rgba(255, 0, 51, 0.25), rgba(136, 0, 17, 0.85));
+            color: #fff; border: 1px solid #ff0033; padding: 14px 20px; font-size: 0.9rem;
+            font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 1.5px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.3); text-align: center;
         }
-        .cyber-btn:active { transform: scale(0.95); background: #ff0033; }
+        .cyber-btn:active { transform: scale(0.96); background: #ff0033; }
 
         .currency-bar {
-            position: absolute; top: 12px; right: 20px; z-index: 20; display: flex; gap: 15px;
-            font-weight: bold; background: rgba(10, 0, 5, 0.9); padding: 6px 16px; border-radius: 4px;
+            position: absolute; top: 12px; right: 15px; z-index: 20; display: flex; gap: 15px;
+            font-weight: bold; background: rgba(10, 0, 5, 0.9); padding: 6px 14px; border-radius: 4px;
             border: 1px solid #ff0033; box-shadow: 0 0 10px rgba(255, 0, 51, 0.4); font-size: 0.85rem;
         }
 
-        /* Split Screen Combat UI */
-        #combat-split-screen {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 15;
-            display: flex; flex-direction: column; background: #000;
+        /* Campaign Mode Direct 3D Action Controls */
+        #campaign-controls-overlay {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 12;
+            pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 20px;
         }
-        #combat-3d-arena { width: 100%; height: 50vh; position: relative; }
+        .action-btns { pointer-events: auto; display: flex; gap: 10px; align-self: flex-end; }
+        .ctrl-btn {
+            width: 55px; height: 55px; border-radius: 50%; background: rgba(255, 0, 51, 0.6);
+            border: 2px solid #ff0033; color: white; font-weight: bold; font-size: 0.75rem;
+            display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px #ff0033;
+        }
+
+        /* Vertical Combat Mode UI (7x7 Board) */
+        #combat-vertical-screen {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 15;
+            display: flex; flex-direction: column; background: #050205;
+        }
+        #combat-3d-arena { width: 100%; height: 42vh; position: relative; }
         #combat-puzzle-board {
-            width: 100%; height: 50vh; background: rgba(15, 3, 6, 0.95); border-top: 2px solid #ff0033;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px;
+            width: 100%; height: 58vh; background: rgba(12, 3, 8, 0.98); border-top: 2px solid #ff0033;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-around; padding: 6px 4px;
         }
 
         .combat-health-bar {
-            position: absolute; top: 10px; width: 40%; height: 16px; background: rgba(255,255,255,0.1);
+            position: absolute; top: 10px; width: 42%; height: 16px; background: rgba(255,255,255,0.1);
             border: 1px solid #fff; border-radius: 3px; overflow: hidden;
         }
         .health-fill { height: 100%; width: 100%; transition: width 0.3s ease; }
 
-        #match3-grid {
-            display: grid; grid-template-columns: repeat(7, 42px); grid-template-rows: repeat(4, 42px);
-            gap: 5px; background: rgba(30, 5, 10, 0.8); padding: 8px; border: 1px solid #ff0033; border-radius: 6px;
+        /* 7x7 Grid Styling */
+        #match3-grid-7x7 {
+            display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(7, 1fr);
+            gap: 4px; width: 95vw; height: 95vw; max-width: 380px; max-height: 380px;
+            background: rgba(25, 5, 12, 0.9); padding: 6px; border: 1.5px solid #ff0033; border-radius: 8px;
         }
-        .tile {
-            width: 42px; height: 42px; border-radius: 4px; display: flex; justify-content: center;
-            align-items: center; font-size: 1.2rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.05); transition: transform 0.1s;
+        
+        .gem {
+            width: 100%; height: 100%; border-radius: 6px; display: flex; justify-content: center;
+            align-items: center; font-size: 1.1rem; cursor: pointer; transition: transform 0.1s;
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        .tile.special { border: 2px solid #ff0033; box-shadow: 0 0 12px #ff0033; animation: glow 1s infinite alternate; }
-        .tile.heart { border: 2px solid #ff0088; box-shadow: 0 0 15px #ff0088; animation: heartGlow 0.8s infinite alternate; }
+        .gem:active { transform: scale(1.15); }
 
-        @keyframes glow { from { box-shadow: 0 0 5px #ff0033; } to { box-shadow: 0 0 15px #ff0033; } }
-        @keyframes heartGlow { from { box-shadow: 0 0 5px #ff0088; } to { box-shadow: 0 0 20px #ff0088; } }
+        /* Neon Gem Colors */
+        .gem-red { background: rgba(255, 0, 51, 0.35); border-color: #ff0033; box-shadow: 0 0 6px #ff0033; }
+        .gem-blue { background: rgba(0, 153, 255, 0.35); border-color: #0099ff; box-shadow: 0 0 6px #0099ff; }
+        .gem-green { background: rgba(0, 255, 102, 0.35); border-color: #00ff66; box-shadow: 0 0 6px #00ff66; }
+        .gem-yellow { background: rgba(255, 204, 0, 0.35); border-color: #ffcc00; box-shadow: 0 0 6px #ffcc00; }
+        .gem-purple { background: rgba(170, 0, 255, 0.35); border-color: #aa00ff; box-shadow: 0 0 6px #aa00ff; }
+        .gem-black { background: rgba(40, 40, 40, 0.8); border-color: #ff0088; box-shadow: 0 0 8px #ff0088; }
 
-        .episodes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 92%; max-height: 55vh; overflow-y: auto; }
+        .gem-special { border: 2px solid #fff; animation: pulseGlow 0.8s infinite alternate; }
+        @keyframes pulseGlow { from { transform: scale(0.95); } to { transform: scale(1.05); } }
+
+        .episodes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 95%; max-height: 55vh; overflow-y: auto; }
         .ep-card { background: rgba(30, 5, 10, 0.85); border: 1px solid #ff0033; padding: 10px; border-radius: 4px; text-align: center; cursor: pointer; }
 
-        /* Slow Mo & Smile Overlay */
         #reaction-overlay {
-            position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
-            z-index: 30; font-size: 1.5rem; font-weight: 900; color: #ff0055;
-            text-shadow: 0 0 20px #ff0055; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+            position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
+            z-index: 30; font-size: 1.1rem; font-weight: 900; color: #ff0055;
+            text-shadow: 0 0 15px #ff0055; pointer-events: none; opacity: 0; transition: opacity 0.3s; text-align: center; width: 90%;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -101,52 +121,62 @@
                 <h2 class="subtitle">Chapter 1: Origin of the Red Angel</h2>
             </div>
             <div class="btn-group">
-                <button class="cyber-btn" onclick="openEpisodes()">Campaign (12 Ep)</button>
-                <button class="cyber-btn" onclick="openCombatPuzzle()">Ninja Combat (6 Side)</button>
+                <button class="cyber-btn" onclick="openEpisodes()">Campaign Story (12 Ep)</button>
+                <button class="cyber-btn" onclick="openCombatPuzzle()">Combat Quests (6 Side)</button>
                 <button class="cyber-btn" onclick="openArmory()">Armory Hub</button>
             </div>
         </div>
 
-        <!-- Episodes Screen -->
+        <!-- Episodes Campaign Menu -->
         <div id="episodes-menu" class="ui-screen hidden">
-            <h1 class="title" style="font-size:1.8rem;">STORY CAMPAIGN</h1>
+            <h1 class="title" style="font-size:1.6rem;">CAMPAIGN EPISODES</h1>
             <div class="episodes-grid" id="episodes-container"></div>
             <button class="cyber-btn" style="margin-top:12px;" onclick="showScreen('main-menu')">Back</button>
         </div>
 
         <!-- Armory Screen -->
         <div id="armory-menu" class="ui-screen hidden">
-            <h1 class="title" style="font-size:1.8rem;">ARMORY HUB</h1>
-            <div style="background:rgba(20,5,10,0.9); padding:15px 30px; border:1px solid #ff0033; display:flex; gap:25px; text-align:center;">
+            <h1 class="title" style="font-size:1.6rem;">ARMORY HUB</h1>
+            <div style="background:rgba(20,5,10,0.9); padding:15px; border:1px solid #ff0033; display:flex; flex-direction:column; gap:15px; text-align:center;">
                 <div>
                     <h3 style="color:#ff0033;">Dual Tactical Pistols</h3>
-                    <p>Level: <span id="gun-lvl">1</span></p>
-                    <button class="cyber-btn" style="margin-top:8px;" onclick="upgradeGun()">Upgrade (200 Cash)</button>
+                    <p>Lvl: <span id="gun-lvl">1</span></p>
+                    <button class="cyber-btn" style="margin-top:6px;" onclick="upgradeGun()">Upgrade (200 Cash)</button>
                 </div>
-                <div style="border-left:1px solid #ff0033; padding-left:25px;">
+                <div style="border-top:1px solid #ff0033; padding-top:10px;">
                     <h3 style="color:#ffaa00;">Dark Phantom Suit</h3>
-                    <p>Level: <span id="armor-lvl">1</span></p>
-                    <button class="cyber-btn" style="margin-top:8px;" onclick="upgradeArmor()">Upgrade (15 Parts)</button>
+                    <p>Lvl: <span id="armor-lvl">1</span></p>
+                    <button class="cyber-btn" style="margin-top:6px;" onclick="upgradeArmor()">Upgrade (15 Parts)</button>
                 </div>
             </div>
             <button class="cyber-btn" style="margin-top:12px;" onclick="showScreen('main-menu')">Back</button>
         </div>
 
-        <!-- Split Screen Combat -->
-        <div id="combat-split-screen" class="hidden">
+        <!-- Campaign Action Controls Overlay -->
+        <div id="campaign-controls-overlay" class="hidden">
+            <button class="cyber-btn" style="pointer-events:auto;" onclick="exitCampaignMode()">Exit Episode</button>
+            <div class="action-btns">
+                <div class="ctrl-btn" onclick="trigger3DAction('fire')">FIRE</div>
+                <div class="ctrl-btn" onclick="trigger3DAction('slash')">SLASH</div>
+                <div class="ctrl-btn" onclick="trigger3DAction('dodge')">DODGE</div>
+            </div>
+        </div>
+
+        <!-- Vertical Combat Screen (7x7 Board) -->
+        <div id="combat-vertical-screen" class="hidden">
             <div id="combat-3d-arena">
-                <div class="combat-health-bar" style="left:20px;">
+                <div class="combat-health-bar" style="left:15px;">
                     <div id="maya-health" class="health-fill" style="background:#00ffcc;"></div>
                 </div>
-                <div class="combat-health-bar" style="right:20px;">
+                <div class="combat-health-bar" style="right:15px;">
                     <div id="enemy-health" class="health-fill" style="background:#ff0033;"></div>
                 </div>
             </div>
 
             <div id="combat-puzzle-board">
-                <p id="action-text" style="color:#ffaa00; font-weight:bold; margin-bottom:8px; font-size:0.85rem;">MATCH TILES TO PERFORM WEAPON ATTACKS!</p>
-                <div id="match3-grid"></div>
-                <button class="cyber-btn" style="margin-top:10px;" onclick="exitCombatPuzzle()">Retreat / Exit</button>
+                <p id="action-text" style="color:#ffaa00; font-weight:bold; font-size:0.8rem;">MATCH 7x7 NEON GEMS FOR NINJA COMBOS!</p>
+                <div id="match3-grid-7x7"></div>
+                <button class="cyber-btn" style="padding:8px 20px; margin-top:4px;" onclick="exitCombatPuzzle()">Retreat / Exit</button>
             </div>
         </div>
     </div>
@@ -156,12 +186,19 @@
         let mayaHP = 100, enemyHP = 100;
         let extraTurn = false;
 
-        const baseTiles = ['🗡️', '🎯', '🔪', '🛡️️'];
-        const specialTiles = { '🗡️': '🔥🗡️', '🎯': '⚡🎯', '🔪': '💀🔪' };
-        
+        const gemTypes = [
+            { symbol: '🗡️', class: 'gem-red', type: 'katana' },
+            { symbol: '🎯', class: 'gem-blue', type: 'shuriken' },
+            { symbol: '🛡️️', class: 'gem-green', type: 'armor' },
+            { symbol: '⚡', class: 'gem-yellow', type: 'lightning' },
+            { symbol: '🔪', class: 'gem-purple', type: 'dagger' },
+            { symbol: '❤️', class: 'gem-black', type: 'heart' }
+        ];
+
         function showScreen(screenId) {
             document.querySelectorAll('.ui-screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById('combat-split-screen').classList.add('hidden');
+            document.getElementById('combat-vertical-screen').classList.add('hidden');
+            document.getElementById('campaign-controls-overlay').classList.add('hidden');
             if (screenId) document.getElementById(screenId).classList.remove('hidden');
             updateCurrencyUI();
         }
@@ -173,83 +210,88 @@
             document.getElementById('armor-lvl').innerText = playerData.armorLevel;
         }
 
+        /* Campaign Mode (Free Action Controls) */
         function openEpisodes() {
             const container = document.getElementById('episodes-container');
             container.innerHTML = '';
             for(let i=1; i<=12; i++) {
                 const card = document.createElement('div');
                 card.className = 'ep-card';
-                card.innerHTML = `<h3>Ep ${i}</h3><p>Story Chapter ${i}</p>`;
-                card.onclick = () => openCombatPuzzle();
+                card.innerHTML = `<h4>Ep ${i}</h4><p style="font-size:0.7rem;">Action Mission</p>`;
+                card.onclick = () => startCampaignEpisode(i);
                 container.appendChild(card);
             }
             showScreen('episodes-menu');
+        }
+
+        function startCampaignEpisode(epNum) {
+            showScreen(null);
+            document.getElementById('campaign-controls-overlay').classList.remove('hidden');
+            setupCombat3DArena();
+        }
+
+        function trigger3DAction(actionType) {
+            alert("Action Triggered: " + actionType.toUpperCase());
+        }
+
+        function exitCampaignMode() {
+            showScreen('main-menu');
         }
 
         function openArmory() { showScreen('armory-menu'); }
         function upgradeGun() { if(playerData.cash>=200){ playerData.cash-=200; playerData.gunLevel++; updateCurrencyUI(); } }
         function upgradeArmor() { if(playerData.parts>=15){ playerData.parts-=15; playerData.armorLevel++; updateCurrencyUI(); } }
 
-        /* Match-3 Combat Logic */
+        /* Vertical 7x7 Combat Logic */
         function openCombatPuzzle() {
             showScreen(null);
-            document.getElementById('combat-split-screen').classList.remove('hidden');
+            document.getElementById('combat-vertical-screen').classList.remove('hidden');
             mayaHP = 100; enemyHP = 100; updateHealthBars();
-            initCombatGrid();
+            init7x7CombatGrid();
             setupCombat3DArena();
         }
 
         function exitCombatPuzzle() {
-            document.getElementById('combat-split-screen').classList.add('hidden');
+            document.getElementById('combat-vertical-screen').classList.add('hidden');
             showScreen('main-menu');
         }
 
-        function initCombatGrid() {
-            const gridEl = document.getElementById('match3-grid');
+        function init7x7CombatGrid() {
+            const gridEl = document.getElementById('match3-grid-7x7');
             gridEl.innerHTML = '';
             
-            // Generate board with rare Heart Symbol & Special Gems
-            for (let r = 0; r < 28; r++) {
-                let rand = Math.random();
-                let type = baseTiles[Math.floor(rand * baseTiles.length)];
-                if (rand > 0.92) type = '❤️'; // Rare Heart Symbol Gem
-
+            // Generate 7x7 (49) Gem Tiles
+            for (let r = 0; r < 49; r++) {
+                let g = gemTypes[Math.floor(Math.random() * gemTypes.length)];
                 const tile = document.createElement('div');
-                tile.className = 'tile';
-                if (type === '❤️') tile.classList.add('heart');
-                tile.innerText = type;
-                tile.onclick = () => handleTileClick(type, tile);
+                tile.className = `gem ${g.class}`;
+                tile.innerText = g.symbol;
+                tile.onclick = () => handleGemClick(g);
                 gridEl.appendChild(tile);
             }
         }
 
-        function handleTileClick(type, element) {
-            let is5MatchSimulated = Math.random() > 0.75; // Simulating 5-gem match condition
+        function handleGemClick(gem) {
+            let is5MatchSimulated = Math.random() > 0.78; // 5-Gem Match probability
             let dmg = 15;
             let actionMsg = "";
 
-            if (type === '❤️') {
+            if (gem.type === 'heart') {
                 triggerHeartBlasterMove();
                 return;
             }
 
-            if (type.includes('🔥') || type.includes('⚡') || type.includes('💀')) {
-                // Special Gem Signature Moves
-                triggerSignatureMove(type);
-                return;
-            }
-
             if (is5MatchSimulated) {
-                // 5-Gem Match Effect
                 extraTurn = true;
-                dmg = 30;
-                actionMsg = "5-GEM MATCH! EXTRA TURN + SPECIAL GEM CREATED!";
-                spawnSpecialGem(type);
+                dmg = 32;
+                actionMsg = `5-MATCH! EXTRA MOVE + SPECIAL ${gem.type.toUpperCase()} GEM!`;
+                showEvilSmileReaction("5-MATCH COMBO! EXTRA TURN!");
             } else {
-                if (type === '🗡️') { actionMsg = "MAYA: Katana Slice!"; dmg = 20; }
-                else if (type === '🎯') { actionMsg = "MAYA: Shuriken Throw!"; dmg = 15; }
-                else if (type === '🔪') { actionMsg = "MAYA: Stealth Dagger Hit!"; dmg = 18; }
-                else if (type === '🛡️️') { actionMsg = "MAYA: Guard Up!"; mayaHP = Math.min(100, mayaHP + 15); dmg = 0; }
+                if (gem.type === 'katana') { actionMsg = "RED KATANA: Heavy Slice!"; dmg = 22; }
+                else if (gem.type === 'shuriken') { actionMsg = "BLUE SHURIKEN: Multi Star Throw!"; dmg = 16; }
+                else if (gem.type === 'armor') { actionMsg = "GREEN SHIELD: Defense Guard!"; mayaHP = Math.min(100, mayaHP + 15); dmg = 0; }
+                else if (gem.type === 'lightning') { actionMsg = "YELLOW LIGHTNING: Electro Strike!"; dmg = 25; }
+                else if (gem.type === 'dagger') { actionMsg = "PURPLE DAGGER: Stealth Stab!"; dmg = 20; }
             }
 
             enemyHP = Math.max(0, enemyHP - dmg);
@@ -265,58 +307,37 @@
             checkVictory();
         }
 
-        function spawnSpecialGem(baseType) {
-            const grid = document.getElementById('match3-grid');
-            let specialType = specialTiles[baseType] || '🔥🗡️';
-            const specialTile = document.createElement('div');
-            specialTile.className = 'tile special';
-            specialTile.innerText = specialType;
-            specialTile.onclick = () => handleTileClick(specialType, specialTile);
-            grid.replaceChild(specialTile, grid.children[Math.floor(Math.random() * 28)]);
-        }
-
-        function triggerSignatureMove(specialType) {
-            showEvilSmileReaction("MAYA: SIGNATURE WEAPON EXECUTION!");
-            enemyHP = Math.max(0, enemyHP - 45);
-            updateHealthBars();
-            initCombatGrid();
-            checkVictory();
-        }
-
         function triggerHeartBlasterMove() {
-            // Dual Power: Phase 1 - Consume Opponent XP/Health
-            showEvilSmileReaction("EVIL SMILE: DRAIN XP & HEART BLASTER!");
-            
-            // Slow motion attack sequence
+            showEvilSmileReaction("😏 EVIL SMILE: DRAINING XP & HEART BLASTER!");
             setTimeout(() => {
                 enemyHP = 0;
                 updateHealthBars();
-                document.getElementById('action-text').innerText = "5-PUNCH HEART BLASTER! OPPONENT HEART BLASTED!";
+                document.getElementById('action-text').innerText = "FATAL 5-PUNCH HEART BLASTER EXECUTION!";
                 setTimeout(() => {
-                    alert("SURPRISING FATAL VICTORY! Opponent Bleeding & Blasted!");
+                    alert("FATAL VICTORY! Enemy Heart Blasted!");
                     playerData.cash += 250; playerData.parts += 10; updateCurrencyUI();
                     exitCombatPuzzle();
                 }, 1000);
-            }, 1200);
+            }, 1000);
         }
 
         function showEvilSmileReaction(msg) {
             const overlay = document.getElementById('reaction-overlay');
-            overlay.innerText = "😏 " + msg;
+            overlay.innerText = msg;
             overlay.style.opacity = 1;
-            setTimeout(() => { overlay.style.opacity = 0; }, 2000);
+            setTimeout(() => { overlay.style.opacity = 0; }, 2200);
         }
 
         function enemyTurnAttack() {
             if (enemyHP <= 0) return;
             mayaHP = Math.max(0, mayaHP - 10);
             updateHealthBars();
-            if (mayaHP <= 0) { alert("Mission Failed! Retrying..."); openCombatPuzzle(); }
+            if (mayaHP <= 0) { alert("Mission Failed!"); openCombatPuzzle(); }
         }
 
         function checkVictory() {
             if (enemyHP <= 0) {
-                alert("VICTORY! Enemy Defeated. Rewards Added!");
+                alert("VICTORY! Rewards Added!");
                 playerData.cash += 100; playerData.parts += 5; updateCurrencyUI();
                 exitCombatPuzzle();
             }
@@ -327,7 +348,7 @@
             document.getElementById('enemy-health').style.width = enemyHP + '%';
         }
 
-        /* 3D Scene Rendering */
+        /* 3D Scene Engine */
         let scene, camera, renderer, mayaMesh, enemyMesh;
         function init3DWorld() {
             scene = new THREE.Scene();
@@ -350,16 +371,16 @@
             floor.rotation.x = -Math.PI / 2; scene.add(floor);
 
             mayaMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.6, 16), new THREE.MeshStandardMaterial({ color: 0xff0033 }));
-            mayaMesh.position.set(-1.5, 0.8, 0); scene.add(mayaMesh);
+            mayaMesh.position.set(-1.2, 0.8, 0); scene.add(mayaMesh);
 
             enemyMesh = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.6, 0.6), new THREE.MeshStandardMaterial({ color: 0x442222 }));
-            enemyMesh.position.set(1.5, 0.8, 0); scene.add(enemyMesh);
+            enemyMesh.position.set(1.2, 0.8, 0); scene.add(enemyMesh);
 
             animate();
         }
 
         function setupCombat3DArena() {
-            camera.position.set(0, 2.5, 5);
+            camera.position.set(0, 2.2, 4.5);
             camera.lookAt(0, 0.8, 0);
         }
 
@@ -372,5 +393,5 @@
         window.onload = () => { init3DWorld(); updateCurrencyUI(); };
     </script>
 </body>
-                    </html>
-                    
+    </html>
+                        

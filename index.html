@@ -5,56 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MAYA THE EXECUTOR</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #050203; color: #fff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Trebuchet MS', 'Segoe UI', sans-serif; }
+        body, html { width: 100vw; height: 100vh; overflow: hidden; background-color: #020102; color: #fff; }
+        
         #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
         
         .ui-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(10, 2, 4, 0.92); backdrop-filter: blur(8px); padding: 10px;
+            background: rgba(5, 2, 4, 0.85); backdrop-filter: blur(10px); padding: 10px;
         }
         .hidden { display: none !important; }
-        h1.title { font-size: 2.2rem; color: #ff0033; text-shadow: 0 0 15px #ff0033; letter-spacing: 2px; text-align: center; }
-        h2.subtitle { font-size: 0.85rem; color: #ccaa77; margin-bottom: 15px; text-transform: uppercase; text-align: center; }
-        .btn {
-            background: linear-gradient(135deg, #880011, #ff0033); color: #fff; border: 1px solid #ff4466;
-            padding: 10px 20px; font-size: 0.9rem; font-weight: bold; border-radius: 4px; cursor: pointer;
-            margin: 4px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.4); text-transform: uppercase; min-width: 200px;
+
+        .title-container { text-align: center; margin-bottom: 20px; }
+        h1.title {
+            font-size: 2.5rem; color: #ff0033; text-transform: uppercase; letter-spacing: 4px;
+            text-shadow: 0 0 20px #ff0033, 0 0 40px #880011; font-weight: 900;
         }
+        h2.subtitle { font-size: 0.85rem; color: #ffaa00; letter-spacing: 2px; text-transform: uppercase; margin-top: -5px; }
+
+        .btn-group { display: flex; gap: 12px; }
+        .cyber-btn {
+            background: linear-gradient(135deg, rgba(255, 0, 51, 0.2), rgba(136, 0, 17, 0.8));
+            color: #fff; border: 1px solid #ff0033; padding: 12px 24px; font-size: 0.85rem;
+            font-weight: bold; border-radius: 2px; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 1.5px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
+            transition: all 0.2s ease; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        }
+        .cyber-btn:active { transform: scale(0.95); background: #ff0033; }
+
         .currency-bar {
             position: absolute; top: 12px; right: 20px; z-index: 20; display: flex; gap: 15px;
-            font-weight: bold; background: rgba(0,0,0,0.8); padding: 6px 14px; border-radius: 20px; border: 1px solid #ff0033; font-size: 0.9rem;
+            font-weight: bold; background: rgba(10, 0, 5, 0.9); padding: 6px 16px; border-radius: 4px;
+            border: 1px solid #ff0033; box-shadow: 0 0 10px rgba(255, 0, 51, 0.4); font-size: 0.85rem;
         }
-        
-        /* Landscape Optimized UI Elements */
+
+        /* Split Screen Combat UI */
+        #combat-split-screen {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 15;
+            display: flex; flex-direction: column; background: #000;
+        }
+        #combat-3d-arena { width: 100%; height: 50vh; position: relative; }
+        #combat-puzzle-board {
+            width: 100%; height: 50vh; background: rgba(15, 3, 6, 0.95); border-top: 2px solid #ff0033;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px;
+        }
+
+        .combat-health-bar {
+            position: absolute; top: 10px; width: 40%; height: 16px; background: rgba(255,255,255,0.1);
+            border: 1px solid #fff; border-radius: 3px; overflow: hidden;
+        }
+        .health-fill { height: 100%; width: 100%; transition: width 0.3s ease; }
+
         #match3-grid {
-            display: grid; grid-template-columns: repeat(6, 38px); grid-template-rows: repeat(6, 38px);
-            gap: 4px; background: rgba(20, 5, 8, 0.9); padding: 8px; border: 2px solid #ff0033; border-radius: 8px; margin-bottom: 10px;
+            display: grid; grid-template-columns: repeat(7, 42px); grid-template-rows: repeat(4, 42px);
+            gap: 5px; background: rgba(30, 5, 10, 0.8); padding: 8px; border: 1px solid #ff0033; border-radius: 6px;
         }
-        .tile { width: 38px; height: 38px; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
-        .episodes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 90%; max-height: 55vh; overflow-y: auto; padding: 5px; }
-        .ep-card { background: rgba(30, 5, 10, 0.85); border: 1px solid #ff0033; padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; }
-        .ep-card h3 { font-size: 0.9rem; color: #fff; } .ep-card p { font-size: 0.75rem; color: #aaa; }
-
-        /* HUD & Game Controls - Horizontal Optimized */
-        #hud { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 5; pointer-events: none; }
-        .hud-element { pointer-events: auto; }
-        #joystick-zone {
-            position: absolute; bottom: 25px; left: 35px; width: 110px; height: 110px;
-            border: 2px solid rgba(255, 0, 51, 0.6); border-radius: 50%; touch-action: none; background: rgba(255, 0, 51, 0.1);
+        .tile {
+            width: 42px; height: 42px; border-radius: 4px; display: flex; justify-content: center;
+            align-items: center; font-size: 1.2rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.05); transition: transform 0.1s;
         }
-        #joystick-stick { position: absolute; top: 35px; left: 35px; width: 40px; height: 40px; background: rgba(255, 0, 51, 0.8); border-radius: 50%; box-shadow: 0 0 10px #ff0033; }
-        
-        .action-container { position: absolute; bottom: 20px; right: 25px; display: flex; gap: 12px; align-items: center; }
-        .action-btn { width: 55px; height: 55px; border-radius: 50%; color: white; font-weight: bold; border: 1px solid #ff4466; box-shadow: 0 0 12px rgba(255, 0, 51, 0.6); touch-action: manipulation; font-size: 0.75rem; }
+        .tile.special { border: 2px solid #ff0033; box-shadow: 0 0 12px #ff0033; animation: glow 1s infinite alternate; }
+        .tile.heart { border: 2px solid #ff0088; box-shadow: 0 0 15px #ff0088; animation: heartGlow 0.8s infinite alternate; }
 
-        /* Video Cutscene Screen */
-        #video-screen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 50; background: #000; display: flex; justify-content: center; align-items: center; }
-        #cutscene-video { width: 100%; height: 100%; object-fit: cover; }
-        .video-controls { position: absolute; bottom: 20px; right: 20px; z-index: 51; }
-        .skip-btn { background: rgba(255, 0, 51, 0.85); border: 1px solid #fff; color: white; padding: 8px 18px; font-weight: bold; border-radius: 20px; cursor: pointer; font-size: 0.85rem; }
-        .ep-title-overlay { position: absolute; top: 20px; left: 20px; z-index: 51; background: rgba(0,0,0,0.7); padding: 8px 12px; border-left: 4px solid #ff0033; }
+        @keyframes glow { from { box-shadow: 0 0 5px #ff0033; } to { box-shadow: 0 0 15px #ff0033; } }
+        @keyframes heartGlow { from { box-shadow: 0 0 5px #ff0088; } to { box-shadow: 0 0 20px #ff0088; } }
+
+        .episodes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 92%; max-height: 55vh; overflow-y: auto; }
+        .ep-card { background: rgba(30, 5, 10, 0.85); border: 1px solid #ff0033; padding: 10px; border-radius: 4px; text-align: center; cursor: pointer; }
+
+        /* Slow Mo & Smile Overlay */
+        #reaction-overlay {
+            position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+            z-index: 30; font-size: 1.5rem; font-weight: 900; color: #ff0055;
+            text-shadow: 0 0 20px #ff0055; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -66,97 +92,76 @@
         </div>
 
         <div id="canvas-container"></div>
+        <div id="reaction-overlay">😏 EVIL SMILE: EXECUTING HEART BLASTER...</div>
 
         <!-- Main Menu -->
         <div id="main-menu" class="ui-screen">
-            <h1 class="title">MAYA THE EXECUTOR</h1>
-            <h2 class="subtitle">Chapter 1: Origin of the Red Angel</h2>
-            <div style="display:flex; gap:10px;">
-                <button class="btn" onclick="openEpisodes()">Campaign (12 Ep)</button>
-                <button class="btn" onclick="openMiniGame()">Combat Puzzle</button>
-                <button class="btn" onclick="openArmory()">Armory & Upgrades</button>
+            <div class="title-container">
+                <h1 class="title">MAYA THE EXECUTOR</h1>
+                <h2 class="subtitle">Chapter 1: Origin of the Red Angel</h2>
+            </div>
+            <div class="btn-group">
+                <button class="cyber-btn" onclick="openEpisodes()">Campaign (12 Ep)</button>
+                <button class="cyber-btn" onclick="openCombatPuzzle()">Ninja Combat (6 Side)</button>
+                <button class="cyber-btn" onclick="openArmory()">Armory Hub</button>
             </div>
         </div>
 
-        <!-- Episodes Selection (4 Columns Landscape) -->
+        <!-- Episodes Screen -->
         <div id="episodes-menu" class="ui-screen hidden">
-            <h1 class="title" style="font-size:1.8rem;">EPISODES</h1>
+            <h1 class="title" style="font-size:1.8rem;">STORY CAMPAIGN</h1>
             <div class="episodes-grid" id="episodes-container"></div>
-            <button class="btn" style="margin-top:10px;" onclick="showScreen('main-menu')">Back</button>
+            <button class="cyber-btn" style="margin-top:12px;" onclick="showScreen('main-menu')">Back</button>
         </div>
 
-        <!-- Armory -->
+        <!-- Armory Screen -->
         <div id="armory-menu" class="ui-screen hidden">
-            <h1 class="title" style="font-size:1.8rem;">ARMORY</h1>
-            <div style="background:rgba(20,5,10,0.85); padding:12px 25px; border-radius:8px; border:1px solid #ff0033; text-align:center; display:flex; gap:20px;">
+            <h1 class="title" style="font-size:1.8rem;">ARMORY HUB</h1>
+            <div style="background:rgba(20,5,10,0.9); padding:15px 30px; border:1px solid #ff0033; display:flex; gap:25px; text-align:center;">
                 <div>
-                    <h3>Dual Tactical Pistols</h3>
+                    <h3 style="color:#ff0033;">Dual Tactical Pistols</h3>
                     <p>Level: <span id="gun-lvl">1</span></p>
-                    <button class="btn" onclick="upgradeGun()">Upgrade (200 Cash)</button>
+                    <button class="cyber-btn" style="margin-top:8px;" onclick="upgradeGun()">Upgrade (200 Cash)</button>
                 </div>
-                <div style="border-left:1px solid #ff0033; padding-left:20px;">
-                    <h3>Dark Phantom Armor</h3>
+                <div style="border-left:1px solid #ff0033; padding-left:25px;">
+                    <h3 style="color:#ffaa00;">Dark Phantom Suit</h3>
                     <p>Level: <span id="armor-lvl">1</span></p>
-                    <button class="btn" onclick="upgradeArmor()">Upgrade (15 Parts)</button>
+                    <button class="cyber-btn" style="margin-top:8px;" onclick="upgradeArmor()">Upgrade (15 Parts)</button>
                 </div>
             </div>
-            <button class="btn" style="margin-top:10px;" onclick="showScreen('main-menu')">Back</button>
+            <button class="cyber-btn" style="margin-top:12px;" onclick="showScreen('main-menu')">Back</button>
         </div>
 
-        <!-- Combat Puzzle Mini-game -->
-        <div id="minigame-menu" class="ui-screen hidden">
-            <h1 class="title" style="font-size:1.6rem;">COMBAT PUZZLE</h1>
-            <div id="match3-grid"></div>
-            <button class="btn" onclick="showScreen('main-menu')">Collect & Exit</button>
-        </div>
-
-        <!-- Video Cutscene Screen -->
-        <div id="video-screen" class="hidden">
-            <div class="ep-title-overlay">
-                <h3 id="cutscene-title" style="color:#ff0033; font-size:1rem;">EPISODE</h3>
-                <p id="cutscene-desc" style="color:#aaa; font-size:0.75rem;">Story Briefing</p>
+        <!-- Split Screen Combat -->
+        <div id="combat-split-screen" class="hidden">
+            <div id="combat-3d-arena">
+                <div class="combat-health-bar" style="left:20px;">
+                    <div id="maya-health" class="health-fill" style="background:#00ffcc;"></div>
+                </div>
+                <div class="combat-health-bar" style="right:20px;">
+                    <div id="enemy-health" class="health-fill" style="background:#ff0033;"></div>
+                </div>
             </div>
-            <video id="cutscene-video" playsinline webkit-playsinline muted autocomplete="off"></video>
-            <div class="video-controls">
-                <button class="skip-btn" onclick="endCutsceneAndStartMission()">START MISSION ➔</button>
-            </div>
-        </div>
 
-        <!-- HUD Screen -->
-        <div id="hud" class="hidden">
-            <div class="hud-element" style="position:absolute; top:15px; left:20px; color:#ff0033; font-weight:bold; font-size:1.2rem;">KILLS: <span id="score">0</span></div>
-            <div id="joystick-zone" class="hud-element"><div id="joystick-stick"></div></div>
-            <div class="hud-element action-container">
-                <button class="action-btn" style="background:#ff0033;" onclick="shootBullet()">FIRE</button>
-                <button class="action-btn" style="background:#8800ff;" onclick="katanaSlash()">SLASH</button>
-                <button class="action-btn" style="background:#00ffff; color:#000;" onclick="dodgeRoll()">DODGE</button>
-                <button class="action-btn" style="background:#333;" onclick="exitMission()">EXIT</button>
+            <div id="combat-puzzle-board">
+                <p id="action-text" style="color:#ffaa00; font-weight:bold; margin-bottom:8px; font-size:0.85rem;">MATCH TILES TO PERFORM WEAPON ATTACKS!</p>
+                <div id="match3-grid"></div>
+                <button class="cyber-btn" style="margin-top:10px;" onclick="exitCombatPuzzle()">Retreat / Exit</button>
             </div>
         </div>
     </div>
 
     <script>
         let playerData = { cash: 500, parts: 10, gunLevel: 1, armorLevel: 1 };
-        
-        const episodes = [
-            { id: 1, name: "Ep 1: Life in Ashes", desc: "Rescue & Memories", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
-            { id: 2, name: "Ep 2: Phantom Ninja", desc: "Martial Arts Training", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
-            { id: 3, name: "Ep 3: First Vendetta", desc: "Rival Gang Massacre", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" },
-            { id: 4, name: "Ep 4: Docks Intercept", desc: "Arms Convoy Raid", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyflights.mp4" },
-            { id: 5, name: "Ep 5: Neon Chamber", desc: "Cyberpunk Assassination", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" },
-            { id: 6, name: "Ep 6: Phantom Vengeance", desc: "Rage Vision Mission", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" },
-            { id: 7, name: "Ep 7: Iron Fortress", desc: "Heavy Siege", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackTakeTheCity.mp4" },
-            { id: 8, name: "Ep 8: Darkside Betrayal", desc: "Rogue Strike", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
-            { id: 9, name: "Ep 9: Extraction", desc: "City Warfare", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4" },
-            { id: 10, name: "Ep 10: Path of Ruin", desc: "Citadel Siege", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4" },
-            { id: 11, name: "Ep 11: Blood Guards", desc: "Semifinal Boss", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
-            { id: 12, name: "Ep 12: Territory Head", desc: "Final Execution", video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" }
-        ];
+        let mayaHP = 100, enemyHP = 100;
+        let extraTurn = false;
 
+        const baseTiles = ['🗡️', '🎯', '🔪', '🛡️️'];
+        const specialTiles = { '🗡️': '🔥🗡️', '🎯': '⚡🎯', '🔪': '💀🔪' };
+        
         function showScreen(screenId) {
             document.querySelectorAll('.ui-screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById('hud').classList.add('hidden');
-            document.getElementById('video-screen').classList.add('hidden');
+            document.getElementById('combat-split-screen').classList.add('hidden');
             if (screenId) document.getElementById(screenId).classList.remove('hidden');
             updateCurrencyUI();
         }
@@ -171,158 +176,201 @@
         function openEpisodes() {
             const container = document.getElementById('episodes-container');
             container.innerHTML = '';
-            episodes.forEach(ep => {
+            for(let i=1; i<=12; i++) {
                 const card = document.createElement('div');
                 card.className = 'ep-card';
-                card.innerHTML = `<h3>${ep.name}</h3><p>${ep.desc}</p>`;
-                card.onclick = () => playCutscene(ep);
+                card.innerHTML = `<h3>Ep ${i}</h3><p>Story Chapter ${i}</p>`;
+                card.onclick = () => openCombatPuzzle();
                 container.appendChild(card);
-            });
+            }
             showScreen('episodes-menu');
         }
 
-        function playCutscene(ep) {
-            showScreen(null);
-            const videoScreen = document.getElementById('video-screen');
-            const videoEl = document.getElementById('cutscene-video');
-            document.getElementById('cutscene-title').innerText = ep.name;
-            document.getElementById('cutscene-desc').innerText = ep.desc;
-            
-            videoEl.src = ep.video;
-            videoScreen.classList.remove('hidden');
-            videoEl.play().catch(e => console.log("Autoplay:", e));
-            videoEl.onended = () => { endCutsceneAndStartMission(); };
-        }
-
-        function endCutsceneAndStartMission() {
-            const videoEl = document.getElementById('cutscene-video');
-            videoEl.pause();
-            document.getElementById('video-screen').classList.add('hidden');
-            startMission();
-        }
-
         function openArmory() { showScreen('armory-menu'); }
-        function upgradeGun() { if(playerData.cash>=200){ playerData.cash-=200; playerData.gunLevel++; updateCurrencyUI(); alert("Gun Upgraded!"); } }
-        function upgradeArmor() { if(playerData.parts>=15){ playerData.parts-=15; playerData.armorLevel++; updateCurrencyUI(); alert("Armor Upgraded!"); } }
+        function upgradeGun() { if(playerData.cash>=200){ playerData.cash-=200; playerData.gunLevel++; updateCurrencyUI(); } }
+        function upgradeArmor() { if(playerData.parts>=15){ playerData.parts-=15; playerData.armorLevel++; updateCurrencyUI(); } }
 
-        const tileTypes = ['🔴', '⚔️', '💣', '⚙️', '💎'];
-        function openMiniGame() { showScreen('minigame-menu'); initMatch3Grid(); }
-        function initMatch3Grid() {
+        /* Match-3 Combat Logic */
+        function openCombatPuzzle() {
+            showScreen(null);
+            document.getElementById('combat-split-screen').classList.remove('hidden');
+            mayaHP = 100; enemyHP = 100; updateHealthBars();
+            initCombatGrid();
+            setupCombat3DArena();
+        }
+
+        function exitCombatPuzzle() {
+            document.getElementById('combat-split-screen').classList.add('hidden');
+            showScreen('main-menu');
+        }
+
+        function initCombatGrid() {
             const gridEl = document.getElementById('match3-grid');
             gridEl.innerHTML = '';
-            for (let r = 0; r < 36; r++) {
-                let type = tileTypes[Math.floor(Math.random() * tileTypes.length)];
+            
+            // Generate board with rare Heart Symbol & Special Gems
+            for (let r = 0; r < 28; r++) {
+                let rand = Math.random();
+                let type = baseTiles[Math.floor(rand * baseTiles.length)];
+                if (rand > 0.92) type = '❤️'; // Rare Heart Symbol Gem
+
                 const tile = document.createElement('div');
-                tile.className = 'tile'; tile.innerText = type;
-                tile.onclick = () => { playerData.cash += 20; updateCurrencyUI(); initMatch3Grid(); };
+                tile.className = 'tile';
+                if (type === '❤️') tile.classList.add('heart');
+                tile.innerText = type;
+                tile.onclick = () => handleTileClick(type, tile);
                 gridEl.appendChild(tile);
             }
         }
 
-        let scene, camera, renderer, player, moveJoystick = { active: false, startX: 0, startY: 0, moveX: 0, moveY: 0 };
-        let bullets = [], enemies = [], score = 0, isPlaying = false;
+        function handleTileClick(type, element) {
+            let is5MatchSimulated = Math.random() > 0.75; // Simulating 5-gem match condition
+            let dmg = 15;
+            let actionMsg = "";
 
-        function init3DEngine() {
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x15080c, 0.02); // Clearer fog
+            if (type === '❤️') {
+                triggerHeartBlasterMove();
+                return;
+            }
+
+            if (type.includes('🔥') || type.includes('⚡') || type.includes('💀')) {
+                // Special Gem Signature Moves
+                triggerSignatureMove(type);
+                return;
+            }
+
+            if (is5MatchSimulated) {
+                // 5-Gem Match Effect
+                extraTurn = true;
+                dmg = 30;
+                actionMsg = "5-GEM MATCH! EXTRA TURN + SPECIAL GEM CREATED!";
+                spawnSpecialGem(type);
+            } else {
+                if (type === '🗡️') { actionMsg = "MAYA: Katana Slice!"; dmg = 20; }
+                else if (type === '🎯') { actionMsg = "MAYA: Shuriken Throw!"; dmg = 15; }
+                else if (type === '🔪') { actionMsg = "MAYA: Stealth Dagger Hit!"; dmg = 18; }
+                else if (type === '🛡️️') { actionMsg = "MAYA: Guard Up!"; mayaHP = Math.min(100, mayaHP + 15); dmg = 0; }
+            }
+
+            enemyHP = Math.max(0, enemyHP - dmg);
+            document.getElementById('action-text').innerText = actionMsg;
+            updateHealthBars();
             
-            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 12, 10); camera.lookAt(0, 0, 0);
+            if (!extraTurn) {
+                setTimeout(enemyTurnAttack, 800);
+            } else {
+                extraTurn = false;
+            }
+
+            checkVictory();
+        }
+
+        function spawnSpecialGem(baseType) {
+            const grid = document.getElementById('match3-grid');
+            let specialType = specialTiles[baseType] || '🔥🗡️';
+            const specialTile = document.createElement('div');
+            specialTile.className = 'tile special';
+            specialTile.innerText = specialType;
+            specialTile.onclick = () => handleTileClick(specialType, specialTile);
+            grid.replaceChild(specialTile, grid.children[Math.floor(Math.random() * 28)]);
+        }
+
+        function triggerSignatureMove(specialType) {
+            showEvilSmileReaction("MAYA: SIGNATURE WEAPON EXECUTION!");
+            enemyHP = Math.max(0, enemyHP - 45);
+            updateHealthBars();
+            initCombatGrid();
+            checkVictory();
+        }
+
+        function triggerHeartBlasterMove() {
+            // Dual Power: Phase 1 - Consume Opponent XP/Health
+            showEvilSmileReaction("EVIL SMILE: DRAIN XP & HEART BLASTER!");
+            
+            // Slow motion attack sequence
+            setTimeout(() => {
+                enemyHP = 0;
+                updateHealthBars();
+                document.getElementById('action-text').innerText = "5-PUNCH HEART BLASTER! OPPONENT HEART BLASTED!";
+                setTimeout(() => {
+                    alert("SURPRISING FATAL VICTORY! Opponent Bleeding & Blasted!");
+                    playerData.cash += 250; playerData.parts += 10; updateCurrencyUI();
+                    exitCombatPuzzle();
+                }, 1000);
+            }, 1200);
+        }
+
+        function showEvilSmileReaction(msg) {
+            const overlay = document.getElementById('reaction-overlay');
+            overlay.innerText = "😏 " + msg;
+            overlay.style.opacity = 1;
+            setTimeout(() => { overlay.style.opacity = 0; }, 2000);
+        }
+
+        function enemyTurnAttack() {
+            if (enemyHP <= 0) return;
+            mayaHP = Math.max(0, mayaHP - 10);
+            updateHealthBars();
+            if (mayaHP <= 0) { alert("Mission Failed! Retrying..."); openCombatPuzzle(); }
+        }
+
+        function checkVictory() {
+            if (enemyHP <= 0) {
+                alert("VICTORY! Enemy Defeated. Rewards Added!");
+                playerData.cash += 100; playerData.parts += 5; updateCurrencyUI();
+                exitCombatPuzzle();
+            }
+        }
+
+        function updateHealthBars() {
+            document.getElementById('maya-health').style.width = mayaHP + '%';
+            document.getElementById('enemy-health').style.width = enemyHP + '%';
+        }
+
+        /* 3D Scene Rendering */
+        let scene, camera, renderer, mayaMesh, enemyMesh;
+        function init3DWorld() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x050204, 0.03);
+
+            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 3, 7);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-            // Bright Ambient & Directional Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
             scene.add(ambientLight);
-            
-            const dirLight = new THREE.DirectionalLight(0xff0055, 2.5);
-            dirLight.position.set(10, 20, 10);
-            scene.add(dirLight);
 
-            // Grid Floor
-            const floor = new THREE.Mesh(
-                new THREE.PlaneGeometry(60, 60), 
-                new THREE.MeshStandardMaterial({ color: 0x221118, roughness: 0.4 })
-            );
+            const redLight = new THREE.PointLight(0xff0033, 4, 20);
+            redLight.position.set(0, 5, 2); scene.add(redLight);
+
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshStandardMaterial({ color: 0x11050a }));
             floor.rotation.x = -Math.PI / 2; scene.add(floor);
 
-            // Maya Model (Red Capsule Hero)
-            player = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 1.8, 16), new THREE.MeshStandardMaterial({ color: 0xff0033, roughness: 0.2 }));
-            player.position.y = 0.9; scene.add(player);
+            mayaMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.6, 16), new THREE.MeshStandardMaterial({ color: 0xff0033 }));
+            mayaMesh.position.set(-1.5, 0.8, 0); scene.add(mayaMesh);
 
-            setupControls(); animate();
-            window.addEventListener('resize', onWindowResize);
+            enemyMesh = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.6, 0.6), new THREE.MeshStandardMaterial({ color: 0x442222 }));
+            enemyMesh.position.set(1.5, 0.8, 0); scene.add(enemyMesh);
+
+            animate();
         }
 
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        function setupCombat3DArena() {
+            camera.position.set(0, 2.5, 5);
+            camera.lookAt(0, 0.8, 0);
         }
-
-        function setupControls() {
-            const zone = document.getElementById('joystick-zone');
-            const stick = document.getElementById('joystick-stick');
-            zone.addEventListener('touchstart', (e) => { moveJoystick.active = true; moveJoystick.startX = e.touches[0].clientX; moveJoystick.startY = e.touches[0].clientY; });
-            window.addEventListener('touchmove', (e) => {
-                if (!moveJoystick.active) return;
-                let dx = e.touches[0].clientX - moveJoystick.startX, dy = e.touches[0].clientY - moveJoystick.startY;
-                let dist = Math.min(Math.hypot(dx, dy), 35), angle = Math.atan2(dy, dx);
-                moveJoystick.moveX = Math.cos(angle) * (dist / 35); moveJoystick.moveY = Math.sin(angle) * (dist / 35);
-                stick.style.transform = `translate(${moveJoystick.moveX * 25}px, ${moveJoystick.moveY * 25}px)`;
-            });
-            window.addEventListener('touchend', () => { moveJoystick.active = false; moveJoystick.moveX = 0; moveJoystick.moveY = 0; stick.style.transform = `translate(0px, 0px)`; });
-        }
-
-        function startMission() { showScreen(null); document.getElementById('hud').classList.remove('hidden'); isPlaying = true; score = 0; document.getElementById('score').innerText = score; }
-        function exitMission() { isPlaying = false; showScreen('main-menu'); }
-        
-        function shootBullet() {
-            if (!isPlaying) return;
-            const b = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 8), new THREE.MeshBasicMaterial({ color: 0xffff00 }));
-            b.position.copy(player.position);
-            const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(player.quaternion);
-            b.userData = { velocity: dir.multiplyScalar(0.9) };
-            scene.add(b); bullets.push(b);
-        }
-
-        function katanaSlash() {
-            if (!isPlaying) return;
-            enemies.forEach((e, idx) => {
-                if (player.position.distanceTo(e.position) < 3.2) { 
-                    scene.remove(e); enemies.splice(idx, 1); score += 2; playerData.cash += 20; updateCurrencyUI(); document.getElementById('score').innerText = score; 
-                }
-            });
-        }
-
-        function dodgeRoll() { if (!isPlaying) return; player.position.add(new THREE.Vector3(0, 0, -1).applyQuaternion(player.quaternion).multiplyScalar(3.5)); }
-
-        setInterval(() => {
-            if (!isPlaying || enemies.length >= 6) return;
-            const e = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.8, 0.8), new THREE.MeshStandardMaterial({ color: 0x882222 }));
-            const angle = Math.random() * Math.PI * 2;
-            e.position.set(player.position.x + Math.cos(angle) * 14, 0.9, player.position.z + Math.sin(angle) * 14);
-            scene.add(e); enemies.push(e);
-        }, 1800);
 
         function animate() {
             requestAnimationFrame(animate);
-            if (isPlaying) {
-                if (moveJoystick.active) {
-                    player.position.x += moveJoystick.moveX * 0.16; player.position.z += moveJoystick.moveY * 0.16;
-                    player.rotation.y = Math.atan2(moveJoystick.moveX, moveJoystick.moveY);
-                }
-                camera.position.set(player.position.x, 12, player.position.z + 10);
-                bullets.forEach((b, bIdx) => {
-                    b.position.add(b.userData.velocity);
-                    enemies.forEach((e, eIdx) => {
-                        if (b.position.distanceTo(e.position) < 1.0) {
-                            scene.remove(e); scene.remove(b); enemies.splice(eIdx, 1); bullets.splice(bIdx, 1);
-                            score++; playerData.cash += 10; document.getElementById('score').innerText = score; updateCurrencyUI();
-                        }
-                    });
-                });
-                enemies.forEach(e => {
-                 
+            mayaMesh.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+
+        window.onload = () => { init3DWorld(); updateCurrencyUI(); };
+    </script>
+</body>
+                    </html>
+                    

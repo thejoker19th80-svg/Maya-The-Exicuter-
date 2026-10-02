@@ -8,34 +8,35 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Trebuchet MS', 'Segoe UI', sans-serif; }
         body, html { width: 100vw; height: 100vh; overflow: hidden; background-color: #020102; color: #fff; }
         
-        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none; }
         
         .ui-screen {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10;
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(5, 2, 4, 0.88); backdrop-filter: blur(10px); padding: 10px;
+            background: rgba(5, 2, 4, 0.92); padding: 10px;
         }
         .hidden { display: none !important; }
 
         .title-container { text-align: center; margin-bottom: 15px; }
         h1.title {
             font-size: 2.2rem; color: #ff0033; text-transform: uppercase; letter-spacing: 3px;
-            text-shadow: 0 0 20px #ff0033, 0 0 40px #880011; font-weight: 900;
+            text-shadow: 0 0 20px #ff0033; font-weight: 900;
         }
         h2.subtitle { font-size: 0.8rem; color: #ffaa00; letter-spacing: 2px; text-transform: uppercase; margin-top: -5px; }
 
-        .btn-group { display: flex; flex-direction: column; gap: 10px; width: 85%; max-width: 320px; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 85%; max-width: 320px; }
         .cyber-btn {
-            background: linear-gradient(135deg, rgba(255, 0, 51, 0.25), rgba(136, 0, 17, 0.85));
-            color: #fff; border: 1px solid #ff0033; padding: 12px 18px; font-size: 0.85rem;
+            background: linear-gradient(135deg, rgba(255, 0, 51, 0.3), rgba(136, 0, 17, 0.9));
+            color: #fff; border: 1.5px solid #ff0033; padding: 14px 18px; font-size: 0.85rem;
             font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase;
-            letter-spacing: 1.5px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.3); text-align: center;
+            letter-spacing: 1.5px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.4); text-align: center;
+            pointer-events: auto;
         }
-        .cyber-btn:active { transform: scale(0.96); background: #ff0033; }
+        .cyber-btn:active { transform: scale(0.95); background: #ff0033; }
 
         .currency-bar {
-            position: absolute; top: 12px; right: 15px; z-index: 20; display: flex; gap: 15px;
-            font-weight: bold; background: rgba(10, 0, 5, 0.9); padding: 6px 14px; border-radius: 4px;
+            position: absolute; top: 12px; right: 15px; z-index: 110; display: flex; gap: 15px;
+            font-weight: bold; background: rgba(10, 0, 5, 0.95); padding: 6px 14px; border-radius: 4px;
             border: 1px solid #ff0033; box-shadow: 0 0 10px rgba(255, 0, 51, 0.4); font-size: 0.85rem;
         }
 
@@ -51,7 +52,7 @@
         .armory-card p { font-size: 0.75rem; color: #ffaa00; margin-bottom: 6px; }
 
         #campaign-controls-overlay {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 12;
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 105;
             pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
         }
         .mission-info-badge {
@@ -60,13 +61,13 @@
         }
         .action-btns { pointer-events: auto; display: flex; gap: 8px; align-self: flex-end; }
         .ctrl-btn {
-            width: 52px; height: 52px; border-radius: 50%; background: rgba(255, 0, 51, 0.65);
+            width: 52px; height: 52px; border-radius: 50%; background: rgba(255, 0, 51, 0.8);
             border: 2px solid #ff0033; color: white; font-weight: bold; font-size: 0.7rem;
-            display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px #ff0033;
+            display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px #ff0033; cursor: pointer;
         }
 
         #combat-vertical-screen {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 15;
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 120;
             display: flex; flex-direction: column; background: #050205;
         }
         #combat-3d-arena { width: 100%; height: 42vh; position: relative; }
@@ -94,23 +95,24 @@
         }
         .gem:active { transform: scale(1.15); }
 
-        .gem-red { background: rgba(255, 0, 51, 0.35); border-color: #ff0033; box-shadow: 0 0 6px #ff0033; }
-        .gem-blue { background: rgba(0, 153, 255, 0.35); border-color: #0099ff; box-shadow: 0 0 6px #0099ff; }
-        .gem-green { background: rgba(0, 255, 102, 0.35); border-color: #00ff66; box-shadow: 0 0 6px #00ff66; }
-        .gem-yellow { background: rgba(255, 204, 0, 0.35); border-color: #ffcc00; box-shadow: 0 0 6px #ffcc00; }
-        .gem-purple { background: rgba(170, 0, 255, 0.35); border-color: #aa00ff; box-shadow: 0 0 6px #aa00ff; }
-        .gem-black { background: rgba(40, 40, 40, 0.8); border-color: #ff0088; box-shadow: 0 0 8px #ff0088; }
+        .gem-red { background: rgba(255, 0, 51, 0.35); border-color: #ff0033; }
+        .gem-blue { background: rgba(0, 153, 255, 0.35); border-color: #0099ff; }
+        .gem-green { background: rgba(0, 255, 102, 0.35); border-color: #00ff66; }
+        .gem-yellow { background: rgba(255, 204, 0, 0.35); border-color: #ffcc00; }
+        .gem-purple { background: rgba(170, 0, 255, 0.35); border-color: #aa00ff; }
+        .gem-black { background: rgba(40, 40, 40, 0.8); border-color: #ff0088; }
 
         .episodes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 95%; max-height: 55vh; overflow-y: auto; }
         .ep-card { background: rgba(30, 5, 10, 0.85); border: 1px solid #ff0033; padding: 8px; border-radius: 4px; text-align: center; cursor: pointer; }
 
         #reaction-overlay {
             position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
-            z-index: 30; font-size: 1.1rem; font-weight: 900; color: #ff0055;
+            z-index: 130; font-size: 1.1rem; font-weight: 900; color: #ff0055;
             text-shadow: 0 0 15px #ff0055; pointer-events: none; opacity: 0; transition: opacity 0.3s; text-align: center; width: 90%;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js CDN Loaded First -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 </head>
 <body>
     <div id="game-container">
@@ -170,7 +172,7 @@
             <button class="cyber-btn" style="margin-top:12px;" onclick="showScreen('main-menu')">Back</button>
         </div>
 
-        <!-- Campaign Action Controls Overlay -->
+        <!-- Campaign Overlay -->
         <div id="campaign-controls-overlay" class="hidden">
             <div style="display:flex; justify-content:space-between; width:100%;">
                 <div class="mission-info-badge" id="mission-type-label">MISSION: ASSAULT</div>
@@ -179,7 +181,7 @@
             <div class="action-btns" id="campaign-btns-container"></div>
         </div>
 
-        <!-- Vertical Combat Screen (7x7 Board) -->
+        <!-- Vertical Combat Screen -->
         <div id="combat-vertical-screen" class="hidden">
             <div id="combat-3d-arena">
                 <div class="combat-health-bar" style="left:15px;">
@@ -215,12 +217,12 @@
             { ep: 8, type: "SNIPER", name: "Rooftop Assassination", desc: "Precision Sniper" },
             { ep: 9, type: "STEALTH", name: "Inner Sanctum", desc: "Katana Silent Slash" },
             { ep: 10, type: "SNIPER", name: "Helipad Guard", desc: "Sniper Long Range" },
-            { ep: 11, type: "RAID", name: "Citadel Raid: Lord Vane", desc: "Raid Citadel (+500💰, +20⚙️, Shield Break Keycard)", perkReward: { cash: 500, parts: 20 } },
+            { ep: 11, type: "RAID", name: "Citadel Raid: Lord Vane", desc: "Raid Citadel (+500💰, +20⚙️, Shield Keycard)", perkReward: { cash: 500, parts: 20 } },
             { ep: 12, type: "BOSS", name: "Commander Viktor", desc: "Final Boss Fight" }
         ];
 
         const gemTypes = [
-            { symbol: '🗡️', class: 'gem-red', type: 'katana' },
+            { symbol: '🗡️️', class: 'gem-red', type: 'katana' },
             { symbol: '🎯', class: 'gem-blue', type: 'shuriken' },
             { symbol: '🛡', class: 'gem-green', type: 'armor' },
             { symbol: '⚡', class: 'gem-yellow', type: 'lightning' },
@@ -281,7 +283,9 @@
                                     <div class="ctrl-btn" onclick="trigger3DAction('STEALTH STAB')">STAB</div>`;
             }
 
-            setup3DCharacterModels(mission.type);
+            if (typeof setup3DCharacterModels === "function") {
+                setup3DCharacterModels(mission.type);
+            }
         }
 
         function completeRaidMission() {
@@ -291,7 +295,7 @@
                 playerData.viktorShieldBroken = true;
                 updateCurrencyUI();
                 showEvilSmileReaction("RAID COMPLETED! LORD VANE DEFEATED!");
-                alert("🎉 CITADEL RAID SUCCESSFUL!\n\nLoot Earned:\n- 💰 +500 Cash\n- ⚙️ +20 Gear Parts\n- 🛡️ Commander Viktor's Shield Keycard Acquired! (Shield Disabled in Ep 12)");
+                alert("🎉 CITADEL RAID SUCCESSFUL!\n\nLoot Earned:\n- 💰 +500 Cash\n- ⚙️ +20 Gear Parts\n- 🛡️ Commander Viktor's Shield Keycard Acquired!");
                 exitCampaignMode();
             }
         }
@@ -317,7 +321,9 @@
             document.getElementById('combat-vertical-screen').classList.remove('hidden');
             mayaHP = 100; enemyHP = 100; updateHealthBars();
             init7x7CombatGrid();
-            setup3DCharacterModels("STEALTH");
+            if (typeof setup3DCharacterModels === "function") {
+                setup3DCharacterModels("STEALTH");
+            }
         }
 
         function exitCombatPuzzle() {
@@ -368,4 +374,4 @@
             checkVictory();
         }
 
-        function 
+        function trig

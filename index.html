@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MAYA THE EXECUTOR</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: sans-serif; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #050203; color: #fff; }
+        #canvas-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
+        .ui-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(10, 2, 4, 0.95); backdrop-filter: blur(8px);
+        }
+        .hidden { display: none !important; }
+        h1.title { font-size: 2.5rem; color: #ff0033; text-shadow: 0 0 15px #ff0033; letter-spacing: 2px; text-align: center; }
+        h2.subtitle { font-size: 1rem; color: #ccaa77; margin-bottom: 20px; text-transform: uppercase; }
+        .btn {
+            background: linear-gradient(135deg, #880011, #ff0033); color: #fff; border: 1px solid #ff4466;
+            padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer;
+            margin: 6px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.4); text-transform: uppercase; min-width: 220px;
+        }
+        .currency-bar {
+            position: absolute; top: 15px; right: 20px; z-index: 20; display: flex; gap: 15px;
+            font-weight: bold; background: rgba(0,0,0,0.7); padding: 8px 16px; border-radius: 20px; border: 1px solid #ff0033;
+        }
+        #match3-grid {
+            display: grid; grid-template-columns: repeat(6, 45px); grid-template-rows: repeat(6, 45px);
+            gap: 5px; background: rgba(20, 5, 8, 0.9); padding: 10px; border: 2px solid #ff0033; border-radius: 8px; margin-bottom: 15px;
+        }
+        .tile { width: 45px; height: 45px; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
+        .tile.selected { border: 2px solid #ffff00; transform: scale(1.1); }
+        #hud { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+        .hud-element { pointer-events: auto; }
+        #joystick-zone {
+            position: absolute; bottom: 30px; left: 30px; width: 120px; height: 120px;
+            border: 2px solid rgba(255, 0, 51, 0.5); border-radius: 50%; touch-action: none; background: rgba(255, 0, 51, 0.05);
+        }
+        #joystick-stick { position: absolute; top: 35px; left: 35px; width: 50px; height: 50px; background: rgba(255, 0, 51, 0.7); border-radius: 50%; box-shadow: 0 0 10px #ff0033; }
+        .action-btn { width: 60px; height: 60px; border-radius: 50%; color: white; font-weight: bold; border: 1px solid #ff4466; box-shadow: 0 0 12px rgba(255, 0, 51, 0.6); touch-action: manipulation; }
+        .episodes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 90%; max-height: 50vh; overflow-y: auto; }
+        .ep-card { background: rgba(30, 5, 10, 0.8); border: 1px solid #ff0033; padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <div class="currency-bar">
+            <div>💰 <span id="cash-val">500</span></div>
+            <div>⚙️ <span id="parts-val">10</span></div>
+        </div>
+
+        <div id="canvas-container"></div>
+
+        <div id="main-menu" class="ui-screen">
+            <h1 class="title">MAYA THE EXECUTOR</h1>
+            <h2 class="subtitle">Chapter 1: Origin of the Red Angel</h2>
+            <button class="btn" onclick="openEpisodes()">Campaign (12 Episodes)</button>
+            <button class="btn" onclick="openMiniGame()">Combat Puzzle (Rewards)</button>
+            <button class="btn" onclick="openArmory()">Armory & Upgrades</button>
+        </div>
+
+        <div id="episodes-menu" class="ui-screen hidden">
+            <h1 class="title">EPISODES</h1>
+            <div class="episodes-grid" id="episodes-container"></div>
+            <button class="btn" style="margin-top:15px;" onclick="showScreen('main-menu')">Back</button>
+        </div>
+
+        <div id="armory-menu" class="ui-screen hidden">
+            <h1 class="title">ARMORY</h1>
+            <div style="background:rgba(20,5,10,0.8); padding:15px; border-radius:8px; border:1px solid #ff0033; text-align:center;">
+                <h3>Dual Tactical Pistols</h3>
+                <p>Level: <span id="gun-lvl">1</span></p>
+                <button class="btn" onclick="upgradeGun()">Upgrade (200 Cash)</button>
+                <hr style="border-color:#441111; margin:10px 0;">
+                <h3>Dark Phantom Armor</h3>
+                <p>Level: <span id="armor-lvl">1</span></p>
+                <button class="btn" onclick="upgradeArmor()">Upgrade (15 Parts)</button>
+            </div>
+            <button class="btn" style="margin-top:15px;" onclick="showScreen('main-menu')">Back</button>
+        </div>
+
+        <div id="minigame-menu" class="ui-screen hidden">
+            <h1 class="title">COMBAT PUZZLE</h1>
+            <h2 class="subtitle">Match Icons To Gain Rewards</h2>
+            <div id="match3-grid"></div>
+            <button class="btn" onclick="showScreen('main-menu')">Collect & Exit</button>
+        </div>
+
+        <div id="hud" class="hidden">
+            <div class="hud-element" style="position:absolute; top:20px; left:20px; color:#ff0033; font-weight:bold; font-size:1.2rem;">KILLS: <span id="score">0</span></div>
+            <div id="joystick-zone" class="hud-element"><div id="joystick-stick"></div></div>
+            <div class="hud-element" style="position: absolute; bottom: 30px; right: 30px; display: flex; gap: 10px;">
+                <button class="action-btn" style="background:#ff0033;" onclick="shootBullet()">FIRE</button>
+                <button class="action-btn" style="background:#8800ff;" onclick="katanaSlash()">SLASH</button>
+                <button class="action-btn" style="background:#00ffff; color:#000;" onclick="dodgeRoll()">DODGE</button>
+                <button class="action-btn" style="background:#333;" onclick="exitMission()">EXIT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let playerData = { cash: 500, parts: 10, gunLevel: 1, armorLevel: 1 };
+        const episodes = [
+            { id: 1, name: "Ep 1: Life in Ashes", desc: "Rescue & Memories" },
+            { id: 2, name: "Ep 2: Phantom Ninja", desc: "Martial Arts Training" },
+            { id: 3, name: "Ep 3: First Vendetta", desc: "Rival Gang Massacre" },
+            { id: 4, name: "Ep 4: Docks Intercept", desc: "Arms Convoy Raid" },
+            { id: 5, name: "Ep 5: Neon Chamber", desc: "Cyberpunk Assassination" },
+            { id: 6, name: "Ep 6: Phantom Vengeance", desc: "Rage Vision Mission" },
+            { id: 7, name: "Ep 7: Iron Fortress", desc: "Heavy Siege" },
+            { id: 8, name: "Ep 8: Darkside Betrayal", desc: "Rogue Strike" },
+            { id: 9, name: "Ep 9: Extraction", desc: "City Warfare" },
+            { id: 10, name: "Ep 10: Path of Ruin", desc: "Citadel Siege" },
+            { id: 11, name: "Ep 11: Blood Guards", desc: "Semifinal Boss" },
+            { id: 12, name: "Ep 12: Territory Head", desc: "Final Execution" }
+        ];
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.ui-screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById('hud').classList.add('hidden');
+            if (screenId) document.getElementById(screenId).classList.remove('hidden');
+            updateCurrencyUI();
+        }
+
+        function updateCurrencyUI() {
+            document.getElementById('cash-val').innerText = playerData.cash;
+            document.getElementById('parts-val').innerText = playerData.parts;
+            document.getElementById('gun-lvl').innerText = playerData.gunLevel;
+            document.getElementById('armor-lvl').innerText = playerData.armorLevel;
+        }
+
+        function openEpisodes() {
+            const container = document.getElementById('episodes-container');
+            container.innerHTML = '';
+            episodes.forEach(ep => {
+                const card = document.createElement('div');
+                card.className = 'ep-card';
+                card.innerHTML = `<h3>${ep.name}</h3><p>${ep.desc}</p>`;
+                card.onclick = () => startMission(ep);
+                container.appendChild(card);
+            });
+            showScreen('episodes-menu');
+        }
+
+        function openArmory() { showScreen('armory-menu'); }
+        function upgradeGun() { if(playerData.cash>=200){ playerData.cash-=200; playerData.gunLevel++; updateCurrencyUI(); alert("Upgraded!"); } }
+        function upgradeArmor() { if(playerData.parts>=15){ playerData.parts-=15; playerData.armorLevel++; updateCurrencyUI(); alert("Upgraded!"); } }
+
+        const tileTypes = ['🔴', '⚔️', '💣', '⚙️', '💎'];
+        function openMiniGame() { showScreen('minigame-menu'); initMatch3Grid(); }
+        function initMatch3Grid() {
+            const gridEl = document.getElementById('match3-grid');
+            gridEl.innerHTML = '';
+            for (let r = 0; r < 36; r++) {
+                let type = tileTypes[Math.floor(Math.random() * tileTypes.length)];
+                const tile = document.createElement('div');
+                tile.className = 'tile'; tile.innerText = type;
+                tile.onclick = () => { playerData.cash += 20; updateCurrencyUI(); initMatch3Grid(); };
+                gridEl.appendChild(tile);
+            }
+        }
+
+        let scene, camera, renderer, player, moveJoystick = { active: false, startX: 0, startY: 0, moveX: 0, moveY: 0 };
+        let bullets = [], enemies = [], score = 0, isPlaying = false;
+
+        function init3DEngine() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x0a0204, 0.04);
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 14, 12); camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            scene.add(new THREE.AmbientLight(0x331111, 0.8));
+            const redLight = new THREE.PointLight(0xff0033, 4, 30);
+            redLight.position.set(0, 8, 0); scene.add(redLight);
+
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshStandardMaterial({ color: 0x080204 }));
+            floor.rotation.x = -Math.PI / 2; scene.add(floor);
+
+            player = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 1.8, 16), new THREE.MeshStandardMaterial({ color: 0xff0033 }));
+            player.position.y = 0.9; scene.add(player);
+
+            setupControls(); animate();
+        }
+
+        function setupControls() {
+            const zone = document.getElementById('joystick-zone');
+            const stick = document.getElementById('joystick-stick');
+            zone.addEventListener('touchstart', (e) => { moveJoystick.active = true; moveJoystick.startX = e.touches[0].clientX; moveJoystick.startY = e.touches[0].clientY; });
+            window.addEventListener('touchmove', (e) => {
+                if (!moveJoystick.active) return;
+                let dx = e.touches[0].clientX - moveJoystick.startX, dy = e.touches[0].clientY - moveJoystick.startY;
+                let dist = Math.min(Math.hypot(dx, dy), 40), angle = Math.atan2(dy, dx);
+                moveJoystick.moveX = Math.cos(angle) * (dist / 40); moveJoystick.moveY = Math.sin(angle) * (dist / 40);
+                stick.style.transform = `translate(${moveJoystick.moveX * 30}px, ${moveJoystick.moveY * 30}px)`;
+            });
+            window.addEventListener('touchend', () => { moveJoystick.active = false; moveJoystick.moveX = 0; moveJoystick.moveY = 0; stick.style.transform = `translate(0px, 0px)`; });
+        }
+
+        function startMission() { showScreen(null); document.getElementById('hud').classList.remove('hidden'); isPlaying = true; score = 0; document.getElementById('score').innerText = score; }
+        function exitMission() { isPlaying = false; showScreen('main-menu'); }
+        function shootBullet() {
+            if (!isPlaying) return;
+            const b = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 8), new THREE.MeshBasicMaterial({ color: 0xff0033 }));
+            b.position.copy(player.position);
+            const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(player.quaternion);
+            b.userData = { velocity: dir.multiplyScalar(0.8) };
+            scene.add(b); bullets.push(b);
+        }
+        function katanaSlash() {
+            if (!isPlaying) return;
+            enemies.forEach((e, idx) => {
+                if (player.position.distanceTo(e.position) < 3.0) { scene.remove(e); enemies.splice(idx, 1); score += 2; playerData.cash += 20; updateCurrencyUI(); document.getElementById('score').innerText = score; }
+            });
+        }
+        function dodgeRoll() { if (!isPlaying) return; player.position.add(new THREE.Vector3(0, 0, -1).applyQuaternion(player.quaternion).multiplyScalar(3.0)); }
+
+        setInterval(() => {
+            if (!isPlaying || enemies.length >= 6) return;
+            const e = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.8, 0.8), new THREE.MeshStandardMaterial({ color: 0x442222 }));
+            const angle = Math.random() * Math.PI * 2;
+            e.position.set(player.position.x + Math.cos(angle) * 15, 0.9, player.position.z + Math.sin(angle) * 15);
+            scene.add(e); enemies.push(e);
+        }, 2000);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (isPlaying) {
+                if (moveJoystick.active) {
+                    player.position.x += moveJoystick.moveX * 0.14; player.position.z += moveJoystick.moveY * 0.14;
+                    player.rotation.y = Math.atan2(moveJoystick.moveX, moveJoystick.moveY);
+                }
+                camera.position.set(player.position.x, 14, player.position.z + 12);
+                bullets.forEach((b, bIdx) => {
+                    b.position.add(b.userData.velocity);
+                    enemies.forEach((e, eIdx) => {
+                        if (b.position.distanceTo(e.position) < 0.9) {
+                            scene.remove(e); scene.remove(b); enemies.splice(eIdx, 1); bullets.splice(bIdx, 1);
+                            score++; playerData.cash += 10; document.getElementById('score').innerText = score; updateCurrencyUI();
+                        }
+                    });
+                });
+                enemies.forEach(e => {
+                    e.position.add(new THREE.Vector3().subVectors(player.position, e.position).normalize().multiplyScalar(0.04));
+                    e.lookAt(player.position);
+                });
+            }
+            renderer.render(scene, camera);
+        }
+        window.onload = () => { init3DEngine(); updateCurrencyUI(); };
+    </script>
+</body>
+  </html>
+  
